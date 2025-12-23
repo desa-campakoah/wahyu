@@ -1,0 +1,1 @@
+var json_kesehatan_20 = {"type":"FeatureCollection","name":"kesehatan_20","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":"1","Nama":"PKD Campakoah"},"geometry":{"type":"Point","coordinates":[109.321292436261302,-7.294980723743447]}}]}
