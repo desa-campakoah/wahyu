@@ -11,6 +11,11 @@
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
+		<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+<script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
         <style>
         html, body, #map {
             width: 100%;
@@ -1798,6 +1803,20 @@
         map.on("layerremove", function(){
             resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
+		// Menambahkan Tombol Search (Pencarian)
+L.Control.geocoder({
+  defaultMarkGeocode: true,
+  placeholder: "Cari lokasi...",
+  collapsed: false
+}).addTo(map);
+
+// Menambahkan Tombol Alat Ukur
+L.control.polylineMeasure({
+  position: 'topleft',
+  unit: 'metres',
+  showClearControl: true,
+  showUnitControl: true
+}).addTo(map);
         </script>        
     </body>
 </html>
