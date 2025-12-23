@@ -20,11 +20,6 @@
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
-
-		<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
-<script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -60,20 +55,6 @@
         var map = L.map('map', {
             zoomControl:false, maxZoom:23, minZoom:1
         }).fitBounds([[-7.303251379349787,109.29269801234845],[-7.2714238610398345,109.3567525708316]]);
-			// Fitur Pencarian (Search)
-L.Control.geocoder({
-    defaultMarkGeocode: true,
-    placeholder: "Cari lokasi...",
-    collapsed: false
-}).addTo(map);
-
-// Fitur Alat Ukur (Measure)
-L.control.polylineMeasure({
-    position: 'topleft',
-    unit: 'metres',
-    showClearControl: true,
-    showUnitControl: true
-}).addTo(map);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
