@@ -57,7 +57,7 @@
         .lokasi-card h4 { margin: 0 0 10px 0; color: #008b8b; }
         .lokasi-card p { margin: 0; font-size: 13px; color: #555; line-height: 1.5; }
 
-        /* --- STYLE TAMBAHAN UNTUK MENU CARD DI BERANDA (SESUAI GAMBAR) --- */
+        /* --- STYLE TAMBAHAN UNTUK MENU CARD DI BERANDA --- */
         .home-menu-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -100,6 +100,16 @@
             color: #555;
             line-height: 1.5;
         }
+
+        /* --- STYLE BARU UNTUK IFRAME PETA --- */
+        #map-frame {
+            width: 100%;
+            height: 600px;
+            border: 5px solid white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
         @media (max-width: 768px) {
             .home-menu-container { grid-template-columns: 1fr; }
         }
@@ -110,7 +120,7 @@
 <div class="navbar-container">
     <nav class="navbar">
         <div class="nav-logo">
-            <img src="image/logo.png" alt="Logo">
+            <img src="images/logo.png" alt="Logo">
             <div>
                 <span>Campakoah Explore</span>
                 <small>Jelajahi Wilayah dengan Teknologi</small>
@@ -118,8 +128,8 @@
         </div>
         <div class="nav-links">
             <a onclick="showHome()">Beranda</a>
-            <a href="webgisdesa/index.html" target="_blank">Peta Campakoah</a>
-            <a href="kecamatan/index.html" target="_blank">Peta Kec.Mrebet</a>
+            <a onclick="showMap('desa')">Peta Campakoah</a>
+            <a onclick="showMap('kecamatan')">Peta Kec. Mrebet</a>
             <a onclick="showDetail('lokasi-view')">Lokasi</a>
             <a onclick="showDetail('tentang-view')">Tentang</a>
         </div>
@@ -128,22 +138,22 @@
 
 <div id="home-content">
     <header class="hero">
-        <img src="image/logo.png" class="main-shield" alt="Shield">
+        <img src="images/logo.png" class="main-shield" alt="Shield">
         <h1>Jelajahi Wilayah dengan Teknologi</h1>
         <p class="webgis-caption">WebGIS Desa Campakoah & Kecamatan Mrebet</p>
         
         <div class="home-menu-container">
-            <a href="webgisdesa/index.html" target="_blank" class="menu-card">
+            <div onclick="showMap('desa')" class="menu-card">
                 <i>📍</i>
                 <h3>Eksplorasi Desa</h3>
                 <p>Akses pemetaan detail infrastruktur, tata guna lahan, dan batas wilayah administrasi Desa Campakoah secara presisi.</p>
-            </a>
+            </div>
             
-            <a href="kecamatan/index.html" target="_blank" class="menu-card">
+            <div onclick="showMap('kecamatan')" class="menu-card">
                 <i>🏙️</i>
                 <h3>Zona Kecamatan</h3>
                 <p>Tinjauan strategis wilayah Kecamatan Mrebet untuk melihat konektivitas antar desa dalam satu sistem informasi geografis.</p>
-            </a>
+            </div>
             
             <div onclick="showDetail('tentang-view')" class="menu-card">
                 <i>🔍</i>
@@ -151,8 +161,18 @@
                 <p>Pelajari lebih dalam mengenai latar belakang pengembangan WebGIS ini serta komitmen kami dalam digitalisasi desa.</p>
             </div>
         </div>
-        </div>
     </header>
+</div>
+
+<div id="map-view" class="detail-view">
+    <div class="lokasi-banner">
+        <h2 id="map-title" style="margin:0;">Menampilkan Peta Spasial</h2>
+        <p id="map-desc" style="margin: 10px 0 0 0; opacity: 0.9; font-size: 15px;">Data geospasial real-time wilayah Campakoah & Mrebet</p>
+    </div>
+    <iframe id="map-frame" src="" frameborder="0"></iframe>
+    <div class="btn-container">
+        <button class="btn-accent" onclick="showHome()">Tutup Peta & Kembali</button>
+    </div>
 </div>
 
 <div id="lokasi-view" class="detail-view">
@@ -162,7 +182,7 @@
     </div>
 
     <div style="width: 100%; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 5px solid white;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15827.420630712415!2d109.3364239!3d-7.36262445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e65598686129841%3A0x5027a76e35688a0!2sCampakoah%2C%20Mrebet%2C%20Purbalingga%20Regency%2C%20Central%20Java!5e0!3m2!1sen!2sid!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15827.424368595914!2d109.34!3d-7.36!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6559f5f5f5f5f5%3A0x5027a76e3568a0!2sCampakoah%2C%20Mrebet%2C%20Purbalingga!5e0!3m2!1sid!2sid!4v1620000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
 
     <div class="lokasi-grid-info">
@@ -187,7 +207,7 @@
 
 <div id="tentang-view" class="detail-view">
     <div class="about-header">
-        <img src="d:\logo.png" style="width: 80px; margin-bottom: 15px;">
+        <img src="images/logo.png" style="width: 80px; margin-bottom: 15px;">
         <h1 style="margin:0;">Tentang Desa Campakoah</h1>
         <p style="color: #666;">Kecamatan Mrebet, Kabupaten Purbalingga</p>
     </div>
@@ -330,17 +350,36 @@
         document.getElementById(id).style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
     function showHome() {
         document.getElementById('home-content').style.display = 'block';
         document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // FUNGSI BARU UNTUK MENAMPILKAN PETA DI DALAM PORTAL
+    function showMap(type) {
+        document.getElementById('home-content').style.display = 'none';
+        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
+        
+        const mapFrame = document.getElementById('map-frame');
+        const mapTitle = document.getElementById('map-title');
+        const mapDesc = document.getElementById('map-desc');
+        
+        if(type === 'desa') {
+            mapFrame.src = "webgisdesa/index.html";
+            mapTitle.innerText = "WebGIS Desa Campakoah";
+            mapDesc.innerText = "Menampilkan data infrastruktur dan batas administrasi tingkat desa.";
+        } else {
+            mapFrame.src = "kecamatan/index.html";
+            mapTitle.innerText = "WebGIS Kecamatan Mrebet";
+            mapDesc.innerText = "Tampilan konektivitas antar wilayah di lingkungan Kecamatan Mrebet.";
+        }
+        
+        document.getElementById('map-view').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 </script>
 
 </body>
-
 </html>
-
-
-
-
