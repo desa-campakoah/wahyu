@@ -20,6 +20,14 @@
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+<script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.css">
+<script src="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -55,6 +63,20 @@
         var map = L.map('map', {
             zoomControl:false, maxZoom:23, minZoom:1
         }).fitBounds([[-7.303251379349787,109.29269801234845],[-7.2714238610398345,109.3567525708316]]);
+		// Aktifkan Fitur Pencarian
+L.Control.geocoder({
+    defaultMarkGeocode: true,
+    placeholder: "Cari lokasi...",
+    collapsed: false
+}).addTo(map);
+
+// Aktifkan Fitur Alat Ukur
+L.control.polylineMeasure({
+    position: 'topleft',
+    unit: 'metres',
+    showClearControl: true,
+    showUnitControl: true
+}).addTo(map);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -1792,20 +1814,6 @@
         map.on("layerremove", function(){
             resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
-		// Menambahkan Tombol Search (Pencarian)
-L.Control.geocoder({
-  defaultMarkGeocode: true,
-  placeholder: "Cari lokasi...",
-  collapsed: false
-}).addTo(map);
-
-// Menambahkan Tombol Alat Ukur
-L.control.polylineMeasure({
-  position: 'topleft',
-  unit: 'metres',
-  showClearControl: true,
-  showUnitControl: true
-}).addTo(map);
         </script>        
     </body>
 </html>
