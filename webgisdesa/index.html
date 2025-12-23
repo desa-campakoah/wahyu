@@ -20,14 +20,10 @@
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
-		<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css">
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-<link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+<link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css">
 <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.css">
-<script src="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/jjimenezshaw/Leaflet.Control.Layers.Tree@master/L.Control.Layers.Tree.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -63,15 +59,15 @@
         var map = L.map('map', {
             zoomControl:false, maxZoom:23, minZoom:1
         }).fitBounds([[-7.303251379349787,109.29269801234845],[-7.2714238610398345,109.3567525708316]]);
-		// Aktifkan Fitur Pencarian
-L.Control.geocoder({
+		// FITUR PENCARIAN (SEARCH)
+var geocoder = L.Control.geocoder({
     defaultMarkGeocode: true,
     placeholder: "Cari lokasi...",
     collapsed: false
 }).addTo(map);
 
-// Aktifkan Fitur Alat Ukur
-L.control.polylineMeasure({
+// FITUR ALAT UKUR (MEASURE)
+var measureControl = L.control.polylineMeasure({
     position: 'topleft',
     unit: 'metres',
     showClearControl: true,
