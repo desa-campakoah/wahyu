@@ -158,7 +158,7 @@
         /* Custom Control Buttons */
         .custom-controls {
             position: absolute;
-            top: 10px;
+            top: 80px;
             left: 10px;
             z-index: 1000;
             display: flex;
@@ -280,6 +280,57 @@
         .legend-container::-webkit-scrollbar-thumb:hover,
         .leaflet-control-layers-expanded::-webkit-scrollbar-thumb:hover {
             background: #555;
+        }
+
+	/* Hover Tooltip */
+        .hover-tooltip {
+            position: absolute;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 1001;
+            display: none;
+            font-size: 12px;
+            max-width: 200px;
+        }
+        
+        .hover-tooltip-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .hover-tooltip-info {
+            color: #666;
+            font-size: 11px;
+        }
+        
+        /* Highlight layer on hover */
+        .leaflet-interactive:hover {
+            stroke-width: 3 !important;
+            stroke-opacity: 1 !important;
+            cursor: pointer;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .custom-controls {
+                top: 10px;
+                right: 10px;
+                left: auto;
+            }
+            
+            .search-container {
+                top: 60px;
+                left: 10px;
+                right: 10px;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
         }
         </style>
         <title></title>
@@ -470,7 +521,13 @@
                     </div>
                 </div>
             </div>
-            
+
+		<!-- Hover Tooltip -->
+            <div class="hover-tooltip" id="hoverTooltip">
+                <div class="hover-tooltip-title" id="tooltipTitle"></div>
+                <div class="hover-tooltip-info" id="tooltipInfo"></div>
+            </div>
+              
         </div>
         
         <div id="map">
@@ -669,6 +726,121 @@
                 this.searchTimeout = setTimeout(searchLocation, 500);
             }
         });
+
+	// ===== HOVER TOOLTIP FUNCTIONALITY =====
+
+var hoverTooltip = document.getElementById('hoverTooltip');
+var tooltipTitle = document.getElementById('tooltipTitle');
+var tooltipInfo = document.getElementById('tooltipInfo');
+
+// Function to show tooltip
+function showTooltip(e, feature) {
+    var props = feature.properties;
+    
+    // Determine title
+    var title = props.Nama || props.NAME_4 || props.name || 'Area';
+    
+    // Determine info
+    var info = [];
+    if (props.Alamat) info.push(props.Alamat);
+    if (props.Dusun) info.push('Dusun: ' + props.Dusun);
+    if (props.RT) info.push('RT: ' + props.RT);
+    if (props.RW) info.push('RW: ' + props.RW);
+    if (props['Nama Dusun']) info.push(props['Nama Dusun']);
+    
+    // Set tooltip content
+    tooltipTitle.innerHTML = title;
+    tooltipInfo.innerHTML = info.join('<br>') || 'Klik untuk info detail';
+    
+    // Position tooltip
+    var x = e.originalEvent.pageX;
+    var y = e.originalEvent.pageY;
+    
+    // Adjust position if near edge
+    var tooltipWidth = 200;
+    var tooltipHeight = 80;
+    
+    if (x + tooltipWidth > window.innerWidth) {
+        x = x - tooltipWidth - 10;
+    } else {
+        x = x + 15;
+    }
+    
+    if (y + tooltipHeight > window.innerHeight) {
+        y = y - tooltipHeight - 10;
+    } else {
+        y = y + 15;
+    }
+    
+    hoverTooltip.style.left = x + 'px';
+    hoverTooltip.style.top = y + 'px';
+    hoverTooltip.style.display = 'block';
+}
+
+// Function to hide tooltip
+function hideTooltip() {
+    hoverTooltip.style.display = 'none';
+}
+
+// Function to add hover events to a layer
+function addHoverEvents(layer) {
+    layer.on('mouseover', function(e) {
+        if (e.target.feature) {
+            showTooltip(e, e.target.feature);
+            // Highlight on hover
+            if (e.target.setStyle) {
+                e.target.setStyle({
+                    weight: 3,
+                    fillOpacity: 0.8
+                });
+            }
+        }
+    });
+    
+    layer.on('mouseout', function(e) {
+        hideTooltip();
+        // Reset style on mouseout
+        if (e.target.setStyle && e.target.defaultOptions) {
+            layer.resetStyle(e.target);
+        }
+    });
+    
+    layer.on('mousemove', function(e) {
+        if (hoverTooltip.style.display === 'block') {
+            var x = e.originalEvent.pageX + 15;
+            var y = e.originalEvent.pageY + 15;
+            
+            // Keep tooltip in viewport
+            if (x + 200 > window.innerWidth) {
+                x = e.originalEvent.pageX - 215;
+            }
+            if (y + 80 > window.innerHeight) {
+                y = e.originalEvent.pageY - 85;
+            }
+            
+            hoverTooltip.style.left = x + 'px';
+            hoverTooltip.style.top = y + 'px';
+        }
+    });
+}
+
+// Apply hover events to all layers
+function applyHoverToAllLayers() {
+    allLayers.forEach(function(layerInfo) {
+        if (layerInfo.layer && layerInfo.layer.eachLayer) {
+            layerInfo.layer.eachLayer(function(feature) {
+                if (feature.feature) {
+                    addHoverEvents(feature);
+                }
+            });
+        }
+    });
+}
+
+// Hide tooltip when mouse leaves map
+map.on('mouseout', function() {
+    hideTooltip();
+});
 
         // remove popup's row if "visible-with-data"
         function removeEmptyRowsFromPopupContent(content, feature) {
@@ -2272,7 +2444,14 @@
         bounds_group.addLayer(layer_LapanganDesa_22);
         map.addLayer(layer_LapanganDesa_22);
 	allLayers.push({name: 'Lapangan Desa', layer: layer_LapanganDesa_22});
-        setBounds();
+        
+	// Apply hover events to all layers after they are created
+setTimeout(function() {
+    applyHoverToAllLayers();
+    console.log('✅ Hover tooltips aktif untuk ' + allLayers.length + ' layers');
+}, 1000);
+	
+	setBounds();
         var i = 0;
         layer_Dusun_5.eachLayer(function(layer) {
             var context = {
@@ -2426,7 +2605,7 @@
         map.on("layerremove", function(){
             resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
-
+		console.log('WebGIS Desa Campakoah berhasil dimuat!');
         </script>        
     </body>
 </html>
