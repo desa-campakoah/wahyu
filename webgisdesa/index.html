@@ -87,12 +87,10 @@
             border-bottom: 1px solid #eee;
             cursor: pointer;
             transition: background 0.2s;
-	position: relative;
         }
         
         .search-result-item:hover {
             background: #f0f7ff;
-	transform: translateX(5px);
         }
         
         .search-result-item:last-child {
@@ -307,51 +305,6 @@
         .hover-tooltip-info {
             color: #666;
             font-size: 11px;
-        }
-
-	/* Hover Effect - Highlight Area */
-        .leaflet-interactive {
-            transition: all 0.3s ease;
-        }
-        
-        .leaflet-interactive:hover {
-            stroke: #ff6b6b !important;
-            stroke-width: 4 !important;
-            stroke-opacity: 1 !important;
-            fill-opacity: 0.8 !important;
-            cursor: pointer;
-            filter: brightness(1.2);
-        }
-        
-        /* Different hover colors for different layer types */
-        .pane_Dusun_5 .leaflet-interactive:hover {
-            fill: rgba(255, 200, 100, 0.8) !important;
-            stroke: #ff8800 !important;
-        }
-        
-        .pane_RW_6 .leaflet-interactive:hover {
-            fill: rgba(100, 200, 255, 0.8) !important;
-            stroke: #0066cc !important;
-        }
-        
-        .pane_BatasRT_7 .leaflet-interactive:hover {
-            fill: rgba(150, 255, 150, 0.8) !important;
-            stroke: #00cc44 !important;
-        }
-        
-        .pane_Bangunan_21 .leaflet-interactive:hover {
-            fill: rgba(255, 150, 150, 0.9) !important;
-            stroke: #cc0000 !important;
-        }
-        
-        .pane_Sawah_4 .leaflet-interactive:hover {
-            fill: rgba(150, 255, 100, 0.8) !important;
-            stroke: #66cc00 !important;
-        }
-        
-        .pane_Kebun_3 .leaflet-interactive:hover {
-            fill: rgba(120, 220, 120, 0.8) !important;
-            stroke: #44aa44 !important;
         }
         
         /* Highlight layer on hover */
@@ -658,7 +611,7 @@
             }
         }
         
-        // Search functionality with smart zoom
+        // Search functionality
         function searchLocation() {
             var searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             var resultsDiv = document.getElementById('searchResults');
@@ -670,7 +623,6 @@
             }
             
             var results = [];
-            var exactMatches = [];
             
             // Search through all layers
             allLayers.forEach(function(layerInfo) {
@@ -679,22 +631,13 @@
                         if (feature.feature && feature.feature.properties) {
                             var props = feature.feature.properties;
                             var matched = false;
-                            var isExactMatch = false;
                             var matchedFields = [];
                             
                             // Search in all properties
                             for (var key in props) {
-                                if (props[key]) {
-                                    var propValue = props[key].toString().toLowerCase();
-                                    if (propValue.includes(searchTerm)) {
-                                        matched = true;
-                                        matchedFields.push(key + ': ' + props[key]);
-                                        
-                                        // Check for exact match
-                                        if (propValue === searchTerm) {
-                                            isExactMatch = true;
-                                        }
-                                    }
+                                if (props[key] && props[key].toString().toLowerCase().includes(searchTerm)) {
+                                    matched = true;
+                                    matchedFields.push(key + ': ' + props[key]);
                                 }
                             }
                             
@@ -702,141 +645,68 @@
                                 var displayName = props.Nama || props.NAME_4 || props.name || 'Tidak ada nama';
                                 var displayInfo = props.Alamat || props.Dusun || props.RT || props.RW || matchedFields[0] || '';
                                 
-                                var result = {
+                                results.push({
                                     name: displayName,
                                     info: displayInfo,
                                     layerName: layerInfo.name,
                                     feature: feature,
                                     bounds: feature.getBounds ? feature.getBounds() : null,
-                                    latlng: feature.getLatLng ? feature.getLatLng() : null,
-                                    isExact: isExactMatch
-                                };
-                                
-                                if (isExactMatch) {
-                                    exactMatches.push(result);
-                                }
-                                results.push(result);
+                                    latlng: feature.getLatLng ? feature.getLatLng() : null
+                                });
                             }
                         }
                     });
                 }
             });
             
-            // Prioritize exact matches
-            var displayResults = exactMatches.length > 0 ? exactMatches : results;
-            
-            if (displayResults.length > 0) {
+            if (results.length > 0) {
                 resultsDiv.style.display = 'block';
-                
-                // Auto-zoom if only one exact match
-                if (exactMatches.length === 1) {
-                    var result = exactMatches[0];
-                    zoomToResult(result);
-                    resultsDiv.innerHTML = '<div class="search-result-item" style="background: #e8f5e9;">' +
-                        '<div class="search-result-title">✓ ' + result.name + '</div>' +
-                        '<div class="search-result-subtitle">' + result.info + 
-                        (result.layerName ? ' • ' + result.layerName : '') + '</div>' +
-                        '<div style="font-size: 10px; color: #4caf50; margin-top: 3px;">Otomatis di-zoom ke lokasi ini</div>' +
-                        '</div>';
-                } else {
-                    displayResults.forEach(function(result) {
-                        var item = document.createElement('div');
-                        item.className = 'search-result-item';
-                        if (result.isExact) {
-                            item.style.background = '#f0f7ff';
-                            item.style.borderLeft = '3px solid #2196f3';
+                results.forEach(function(result) {
+                    var item = document.createElement('div');
+                    item.className = 'search-result-item';
+                    item.innerHTML = '<div class="search-result-title">' + result.name + '</div>' +
+                                   '<div class="search-result-subtitle">' + result.info + 
+                                   (result.layerName ? ' • ' + result.layerName : '') + '</div>';
+                    item.onclick = function() {
+                        // Zoom to feature
+                        if (result.bounds) {
+                            map.fitBounds(result.bounds, {padding: [50, 50]});
+                        } else if (result.latlng) {
+                            map.setView(result.latlng, 18);
                         }
-                        item.innerHTML = '<div class="search-result-title">' + 
-                                       (result.isExact ? '⭐ ' : '') + result.name + '</div>' +
-                                       '<div class="search-result-subtitle">' + result.info + 
-                                       (result.layerName ? ' • ' + result.layerName : '') + '</div>';
-                        item.onclick = function() {
-                            zoomToResult(result);
-                            resultsDiv.style.display = 'none';
-                        };
-                        resultsDiv.appendChild(item);
-                    });
-                }
+                        
+                        // Remove old search marker
+                        if (searchMarker) {
+                            map.removeLayer(searchMarker);
+                        }
+                        
+                        // Add new search marker
+                        if (result.latlng) {
+                            searchMarker = L.marker(result.latlng, {
+                                icon: L.icon({
+                                    iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSI0MSIgdmlld0JveD0iMCAwIDI1IDQxIj48cGF0aCBmaWxsPSIjZmYwMDAwIiBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDEuNCAwLjIgMi43IDAuNyA0TDEyLjUgNDEgMjQuMyAxNi41YzAuNC0xLjMgMC43LTIuNiAwLjctNEMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiLz48Y2lyY2xlIGZpbGw9IiNmZmYiIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNSIvPjwvc3ZnPg==',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34]
+                                })
+                            }).addTo(map);
+                        }
+                        
+                        // Open popup
+                        if (result.feature.openPopup) {
+                            result.feature.openPopup();
+                        }
+                        
+                        resultsDiv.style.display = 'none';
+                    };
+                    resultsDiv.appendChild(item);
+                });
             } else {
                 resultsDiv.style.display = 'block';
                 resultsDiv.innerHTML = '<div class="no-results">Tidak ada hasil ditemukan untuk "' + searchTerm + '"</div>';
             }
         }
         
-	// Helper function to zoom to search result
-        function zoomToResult(result) {
-            // Remove old search marker
-            if (searchMarker) {
-                map.removeLayer(searchMarker);
-            }
-            
-            // Zoom to feature
-            if (result.bounds) {
-                map.fitBounds(result.bounds, {
-                    padding: [50, 50],
-                    maxZoom: 17
-                });
-            } else if (result.latlng) {
-                map.setView(result.latlng, 18);
-            }
-            
-            // Add search marker for point features
-            if (result.latlng) {
-                searchMarker = L.marker(result.latlng, {
-                    icon: L.icon({
-                        iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSI0MSIgdmlld0JveD0iMCAwIDI1IDQxIj48cGF0aCBmaWxsPSIjZmYwMDAwIiBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDEuNCAwLjIgMi43IDAuNyA0TDEyLjUgNDEgMjQuMyAxNi41YzAuNC0xLjMgMC43LTIuNiAwLjctNEMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiLz48Y2lyY2xlIGZpbGw9IiNmZmYiIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNSIvPjwvc3ZnPg==',
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34]
-                    })
-                }).addTo(map);
-            }
-            
-            // Highlight the feature temporarily
-            if (result.feature && result.feature.setStyle) {
-                var originalStyle = {
-                    weight: result.feature.options.weight,
-                    fillOpacity: result.feature.options.fillOpacity,
-                    color: result.feature.options.color,
-                    fillColor: result.feature.options.fillColor
-                };
-                
-                result.feature.setStyle({
-                    weight: 5,
-                    fillOpacity: 0.9,
-                    color: '#ff0000',
-                    fillColor: '#ffff00'
-                });
-                
-                // Flash effect
-                var flashCount = 0;
-                var flashInterval = setInterval(function() {
-                    flashCount++;
-                    if (flashCount % 2 === 0) {
-                        result.feature.setStyle({
-                            fillColor: '#ffff00'
-                        });
-                    } else {
-                        result.feature.setStyle({
-                            fillColor: originalStyle.fillColor
-                        });
-                    }
-                    
-                    if (flashCount >= 6) {
-                        clearInterval(flashInterval);
-                        result.feature.setStyle(originalStyle);
-                    }
-                }, 300);
-            }
-            
-            // Open popup
-            if (result.feature.openPopup) {
-                setTimeout(function() {
-                    result.feature.openPopup();
-                }, 1000);
-            }
-        }
-
         // Close search results when clicking outside
         document.addEventListener('click', function(e) {
             var searchContainer = document.querySelector('.search-container');
@@ -913,69 +783,46 @@ function hideTooltip() {
 }
 
 // Function to add hover events to a layer
-        function addHoverEvents(layer) {
-            var originalStyle = {};
+function addHoverEvents(layer) {
+    layer.on('mouseover', function(e) {
+        if (e.target.feature) {
+            showTooltip(e, e.target.feature);
+            // Highlight on hover
+            if (e.target.setStyle) {
+                e.target.setStyle({
+                    weight: 3,
+                    fillOpacity: 0.8
+                });
+            }
+        }
+    });
+    
+    layer.on('mouseout', function(e) {
+        hideTooltip();
+        // Reset style on mouseout
+        if (e.target.setStyle && e.target.defaultOptions) {
+            layer.resetStyle(e.target);
+        }
+    });
+    
+    layer.on('mousemove', function(e) {
+        if (hoverTooltip.style.display === 'block') {
+            var x = e.originalEvent.pageX + 15;
+            var y = e.originalEvent.pageY + 15;
             
-            layer.on('mouseover', function(e) {
-                if (e.target.feature) {
-                    // Save original style
-                    originalStyle = {
-                        weight: e.target.options.weight,
-                        fillOpacity: e.target.options.fillOpacity,
-                        color: e.target.options.color,
-                        fillColor: e.target.options.fillColor
-                    };
-                    
-                    showTooltip(e, e.target.feature);
-                    
-                    // Apply hover style with color change
-                    if (e.target.setStyle) {
-                        var hoverColor = '#FFD700'; // Gold color
-                        
-                        // Different colors based on layer type
-                        if (e.target.feature.properties.Nama) {
-                            var nama = e.target.feature.properties.Nama;
-                            if (nama =  e.target.setStyle({
-                        weight: 4,
-                        fillOpacity: 0.8,
-                        color: '#ff6b6b',
-                        fillColor: hoverColor
-                    });
-                    
-                    // Bring to front
-                    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                        e.target.bringToFront();
-                    }
-                }
+            // Keep tooltip in viewport
+            if (x + 200 > window.innerWidth) {
+                x = e.originalEvent.pageX - 215;
             }
-        });
-        
-        layer.on('mouseout', function(e) {
-            hideTooltip();
+            if (y + 80 > window.innerHeight) {
+                y = e.originalEvent.pageY - 85;
+            }
             
-            // Reset to original style
-            if (e.target.setStyle && originalStyle.weight) {
-                e.target.setStyle(originalStyle);
-            }
-        });
-        
-        layer.on('mousemove', function(e) {
-            if (hoverTooltip.style.display === 'block') {
-                var x = e.originalEvent.pageX + 15;
-                var y = e.originalEvent.pageY + 15;
-                
-                if (x + 200 > window.innerWidth) {
-                    x = e.originalEvent.pageX - 215;
-                }
-                if (y + 80 > window.innerHeight) {
-                    y = e.originalEvent.pageY - 85;
-                }
-                
-                hoverTooltip.style.left = x + 'px';
-                hoverTooltip.style.top = y + 'px';
-            }
-        });
-    }
+            hoverTooltip.style.left = x + 'px';
+            hoverTooltip.style.top = y + 'px';
+        }
+    });
+}
 
 // Apply hover events to all layers
 function applyHoverToAllLayers() {
