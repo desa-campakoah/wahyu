@@ -327,33 +327,11 @@
                 left: 10px;
                 right: 10px;
             }
-            /* Search Box & Results */
-        .search-container {
-            position: absolute; top: 10px; left: 50px; z-index: 1000;
-            background: white; padding: 5px; border-radius: 4px;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.4); display: flex;
-        }
-        #searchInput { width: 200px; padding: 8px; border: 1px solid #ccc; outline: none; }
-        .search-results {
-            position: absolute; top: 55px; left: 50px; z-index: 1000;
-            background: white; width: 218px; max-height: 200px;
-            overflow-y: auto; border: 1px solid #ccc; display: none;
-        }
-        .search-item { padding: 8px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 12px; }
-        .search-item:hover { background: #f0f0f0; }
-
-        /* Highlight area saat kursor lewat */
-        .leaflet-interactive:hover {
-            stroke-width: 4 !important;
-            stroke: #ffff00 !important; /* Warna kuning */
-            fill-opacity: 0.7 !important;
-            cursor: pointer;
-        }
+            
             .search-box input {
                 width: 100%;
             }
         }
-            
         </style>
         <title></title>
     </head>
@@ -362,11 +340,6 @@
         <!-- 3. HTML MAP DAN KOMPONEN BARU -->
         <!-- ========================================== -->
         <div id="map">
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Cari Dusun/RW/RT..." oninput="exeSearch()">
-            </div>
-            <div id="searchResults" class="search-results"></div>
-        </div>
             <!-- TAMBAHAN HTML BARU (PASTE DI SINI) -->
             
             <!-- Custom Controls -->
@@ -599,46 +572,6 @@
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-            var searchList = [];
-
-        function highlightFeature(e) {
-            var layer = e.target;
-            layer.setStyle({ weight: 5, color: '#ffff00', fillOpacity: 0.7, fillColor: '#ffff00' });
-            layer.openPopup();
-        }
-
-        function resetHighlight(e) {
-            var layer = e.target;
-            // Memanggil fungsi resetStyle asli milik layer tersebut
-            if (layer.options.layerName === 'layer_Dusun_5') layer_Dusun_5.resetStyle(e.target);
-            if (layer.options.layerName === 'layer_RW_6') layer_RW_6.resetStyle(e.target);
-            if (layer.options.layerName === 'layer_BatasRT_7') layer_BatasRT_7.resetStyle(e.target);
-        }
-
-        function exeSearch() {
-            var val = document.getElementById('searchInput').value.toLowerCase();
-            var res = document.getElementById('searchResults');
-            res.innerHTML = '';
-            if(!val) { res.style.display='none'; return; }
-            searchList.forEach(function(item) {
-                item.layer.eachLayer(function(l) {
-                    var p = l.feature.properties;
-                    var name = (p.Dusun || p.RW || p.Nama || "").toString().toLowerCase();
-                    if(name.includes(val)) {
-                        res.style.display='block';
-                        var div = document.createElement('div');
-                        div.className = 'search-item';
-                        div.innerHTML = name.toUpperCase();
-                        div.onclick = function() {
-                            map.fitBounds(l.getBounds());
-                            l.openPopup();
-                            res.style.display = 'none';
-                        };
-                        res.appendChild(div);
-                    }
-                });
-            });
-        }
 
 	/* ========================================== */
         /* 6. TAMBAHAN JAVASCRIPT BARU (PASTE DI SINI) */
@@ -1288,13 +1221,7 @@ map.on('mouseout', function() {
             dataVar: 'json_Dusun_5',
             layerName: 'layer_Dusun_5',
             pane: 'pane_Dusun_5',
-           onEachFeature: function (feature, layer) {
-                pop_Dusun_5(feature, layer);
-
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight
-        }); ,
+            onEachFeature: pop_Dusun_5,
             style: style_Dusun_5_0,
         });
         bounds_group.addLayer(layer_Dusun_5);
@@ -1389,15 +1316,7 @@ map.on('mouseout', function() {
             dataVar: 'json_RW_6',
             layerName: 'layer_RW_6',
             pane: 'pane_RW_6',
-            onEachFeature: function (feature, layer) {
-        pop_RW_6(feature, layer);
-
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight
-        });
-        
-    },
+            onEachFeature: pop_RW_6,
             style: style_RW_6_0,
         });
         bounds_group.addLayer(layer_RW_6);
@@ -1633,13 +1552,7 @@ map.on('mouseout', function() {
             dataVar: 'json_BatasRT_7',
             layerName: 'layer_BatasRT_7',
             pane: 'pane_BatasRT_7',
-            onEachFeature: function (feature, layer) {
-        pop_BatasRT_7(feature, layer);
-             layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight
-        });
-           },     
+            onEachFeature: pop_BatasRT_7,
             style: style_BatasRT_7_0,
         });
         bounds_group.addLayer(layer_BatasRT_7);
@@ -2693,7 +2606,6 @@ setTimeout(function() {
             resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
 		console.log('WebGIS Desa Campakoah berhasil dimuat!');
-            searchList.push({layer: layer_Dusun_5}, {layer: layer_RW_6}, {layer: layer_BatasRT_7});
         </script>        
     </body>
 </html>
