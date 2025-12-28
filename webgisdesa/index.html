@@ -573,14 +573,6 @@
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
 
-			// ===== TAMBAHKAN DI SINI =====
-var hoverStyle = {
-    weight: 3,
-    color: '#ffff00',
-    fillColor: '#fff700',
-    fillOpacity: 0.6
-};
-
 	/* ========================================== */
         /* 6. TAMBAHAN JAVASCRIPT BARU (PASTE DI SINI) */
         /* ========================================== */
@@ -678,9 +670,9 @@ var hoverStyle = {
                     item.onclick = function() {
                         // Zoom to feature
                         if (result.bounds) {
-                            map.fitBounds(result.bounds, {padding: [30, 30], maxZoom: 19});
+                            map.fitBounds(result.bounds, {padding: [50, 50]});
                         } else if (result.latlng) {
-                            map.setView(result.latlng, 19);
+                            map.setView(result.latlng, 18);
                         }
                         
                         // Remove old search marker
@@ -797,12 +789,13 @@ function addHoverEvents(layer) {
             showTooltip(e, e.target.feature);
             // Highlight on hover
             if (e.target.setStyle) {
-                if (e.target.setStyle) {
-            e.target.setStyle(hoverStyle);
+                e.target.setStyle({
+                    weight: 3,
+                    fillOpacity: 0.8
+                });
+            }
         }
-    }
-});
-           
+    });
     
     layer.on('mouseout', function(e) {
         hideTooltip();
@@ -2613,7 +2606,6 @@ setTimeout(function() {
             resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
 		console.log('WebGIS Desa Campakoah berhasil dimuat!');
-		applyHoverToAllLayers();
         </script>        
     </body>
 </html>
