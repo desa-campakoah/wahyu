@@ -18,10 +18,365 @@
             padding: 0;
             margin: 0;
         }
+			/* ========================================== */
+        /* 2. TAMBAHAN STYLE BARU (PASTE DI SINI) */
+        /* ========================================== */
+        
+        /* Search Box Styling */
+        .search-container {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+            z-index: 1000;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            padding: 3px;
+        }
+        
+        .search-box input {
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            width: 280px;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+        
+        .search-box button {
+            background: #fff;
+            border: none;
+            border-left: 1px solid #ddd;
+            padding: 8px 15px;
+            cursor: pointer;
+            color: #555;
+            transition: background 0.2s;
+        }
+        
+        .search-box button:hover {
+            background: #f8f8f8;
+            color: #000;
+        }
+        
+        .search-box i {
+            font-size: 16px;
+        }
+        
+        /* Search Results */
+        .search-results {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            z-index: 1000;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            max-height: 350px;
+            overflow-y: auto;
+            display: none;
+            min-width: 320px;
+        }
+        
+        .search-result-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background: #f0f7ff;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .search-result-subtitle {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: #999;
+        }
+        
+        /* Custom Layer Control Styling */
+        .leaflet-control-layers {
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+        }
+        
+        .leaflet-control-layers-expanded {
+            padding: 10px 12px;
+            background: white;
+            max-height: 450px;
+            overflow-y: auto;
+            min-width: 200px;
+        }
+        
+        .layer-group-title {
+            font-weight: bold;
+            font-size: 13px;
+            color: #2c5282;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .layer-group-title:first-child {
+            margin-top: 0;
+        }
+        
+        .leaflet-control-layers-overlays label {
+            padding: 4px 8px;
+            margin: 2px 0;
+            display: flex;
+            align-items: center;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+        
+        .leaflet-control-layers-overlays label:hover {
+            background: #f7fafc;
+        }
+        
+        /* Custom Control Buttons */
+        .custom-controls {
+            position: absolute;
+            top: 80px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .custom-control {
+            background: white;
+            border: 2px solid rgba(0,0,0,0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+            transition: all 0.2s;
+        }
+        
+        .custom-control:hover {
+            background: #f8f8f8;
+            transform: scale(1.05);
+        }
+        
+        .custom-control i {
+            font-size: 16px;
+            color: #333;
+        }
+        
+        /* Legend Styling */
+        .legend-container {
+            position: absolute;
+            bottom: 30px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+            max-width: 220px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: #2c5282;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 6px;
+        }
+        
+        .legend-category {
+            margin-bottom: 12px;
+        }
+        
+        .legend-category-title {
+            font-weight: 600;
+            font-size: 12px;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 11px;
+            padding: 2px 0;
+        }
+        
+        .legend-color {
+            width: 22px;
+            height: 14px;
+            margin-right: 8px;
+            border: 1px solid #555;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        
+        .legend-line {
+            width: 22px;
+            height: 3px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        
+        .legend-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        
+        /* Scrollbar styling */
+        .search-results::-webkit-scrollbar,
+        .legend-container::-webkit-scrollbar,
+        .leaflet-control-layers-expanded::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .search-results::-webkit-scrollbar-track,
+        .legend-container::-webkit-scrollbar-track,
+        .leaflet-control-layers-expanded::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .search-results::-webkit-scrollbar-thumb,
+        .legend-container::-webkit-scrollbar-thumb,
+        .leaflet-control-layers-expanded::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        
+        .search-results::-webkit-scrollbar-thumb:hover,
+        .legend-container::-webkit-scrollbar-thumb:hover,
+        .leaflet-control-layers-expanded::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+	/* Hover Tooltip */
+        .hover-tooltip {
+            position: absolute;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 1001;
+            display: none;
+            font-size: 12px;
+            max-width: 200px;
+        }
+        
+        .hover-tooltip-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .hover-tooltip-info {
+            color: #666;
+            font-size: 11px;
+        }
+        
+        /* Highlight layer on hover */
+        .leaflet-interactive:hover {
+            stroke-width: 3 !important;
+            stroke-opacity: 1 !important;
+            cursor: pointer;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .custom-controls {
+                top: 10px;
+                right: 10px;
+                left: auto;
+            }
+            
+            .search-container {
+                top: 60px;
+                left: 10px;
+                right: 10px;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+        }
         </style>
         <title></title>
     </head>
     <body>
+		<!-- ========================================== -->
+        <!-- 3. HTML MAP DAN KOMPONEN BARU -->
+        <!-- ========================================== -->
+        <div id="map">
+            <!-- TAMBAHAN HTML BARU (PASTE DI SINI) -->
+            
+            <!-- Custom Controls -->
+            <div class="custom-controls">
+                <div class="custom-control" onclick="goHome()" title="Kembali ke View Awal">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="custom-control" onclick="locateMe()" title="Lokasi Saya">
+                    <i class="fas fa-location-arrow"></i>
+                </div>
+                <div class="custom-control" onclick="toggleLegend()" title="Toggle Legend">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="custom-control" onclick="window.print()" title="Print Peta">
+                    <i class="fas fa-print"></i>
+                </div>
+            </div>
+            
+            <!-- Search Container -->
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Cari lokasi, RT, RW, Dusun, fasilitas...">
+                    <button onclick="searchLocation()"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <!-- Search Results -->
+            <div class="search-results" id="searchResults"></div>
+
+			<!-- Hover Tooltip -->
+            <div class="hover-tooltip" id="hoverTooltip">
+                <div class="hover-tooltip-title" id="tooltipTitle"></div>
+                <div class="hover-tooltip-info" id="tooltipInfo"></div>
+            </div>
+              
+        </div>
+			
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
