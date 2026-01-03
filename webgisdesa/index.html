@@ -370,23 +370,11 @@
                 width: 100%;
             }
         }
-
-	.search-container input { border: 1px solid #ccc; padding: 4px 8px; width: 180px; }
-.info-panel {
-    padding: 10px; background: rgba(255,255,255,0.9);
-    border-radius: 5px; border-left: 4px solid #f1c40f;
-}
-
         </style>
         <title></title>
     </head>
     <body>
-	 
-	<div class="search-container">
-    <input type="text" id="searchInput" placeholder="Cari Dusun, RT, RW...">
-    <button onclick="executeSearch()"><i class="fa fa-search"></i> Search</button>
-	</div>
-	<!-- ========================================== -->
+	 <!-- ========================================== -->
         <!-- 3. HTML MAP DAN KOMPONEN BARU -->
         <!-- ========================================== -->
         <div id="map">
@@ -2774,43 +2762,6 @@ setTimeout(function() {
         resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
 		console.log('WebGIS Desa Campakoah berhasil dimuat!');
-        </script>  
-	<script>
-// Fungsi untuk menjalankan pencarian pada data asli QGIS Anda
-function executeSearch() {
-    var val = document.getElementById('searchInput').value.toLowerCase();
-    var found = false;
-    
-    // Daftar layer asli Anda dari QGIS
-    var layers = [layer_Dusun_5, layer_RW_6, layer_BatasRT_7, layer_LapanganDesa_22];
-
-    layers.forEach(function(layerGroup) {
-        layerGroup.eachLayer(function(layer) {
-            var p = layer.feature.properties;
-            var match = (p.Nama && p.Nama.toString().toLowerCase().includes(val)) ||
-                        (p.Dusun && p.Dusun.toString().toLowerCase().includes(val)) ||
-                        (p.RT && p.RT.toString() === val) ||
-                        (p.RW && p.RW.toString() === val);
-
-            if (match && val !== "") {
-                map.fitBounds(layer.getBounds());
-                layer.openPopup();
-                
-                // Efek Highlight Kuning Sementara
-                layer.setStyle({fillColor: '#f1c40f', fillOpacity: 0.8});
-                setTimeout(function(){ layerGroup.resetStyle(layer); }, 3000);
-                
-                found = true;
-            }
-        });
-    });
-    if (!found && val !== "") alert("Data tidak ditemukan.");
-}
-
-// Menjalankan pencarian saat tombol Enter ditekan
-document.getElementById('searchInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') executeSearch();
-});
-</script>      
+        </script>        
     </body>
 </html>
