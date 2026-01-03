@@ -1163,6 +1163,20 @@ map.on('mouseout', function() {
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
+			layer.on({
+        mouseover: function(e) {
+            e.target.setStyle({
+                fillColor: '#ffff00', // Kuning
+                fillOpacity: 0.7,
+                weight: 3
+            });
+        },
+        mouseout: function(e) {
+            layer_Dusun_5.resetStyle(e.target);
+        }
+    });
+
+					
         function style_Dusun_5_0(feature) {
             switch(String(feature.properties['Nama'])) {
                 case 'Dusun 1':
@@ -1242,6 +1256,18 @@ map.on('mouseout', function() {
 			});
 			layer.bindPopup(content, { maxHeight: 400 });
         }
+layer.on({
+        mouseover: function(e) {
+            e.target.setStyle({
+                fillColor: '#ffff00', // Kuning
+                fillOpacity: 0.7,
+                weight: 3
+            });
+        },
+        mouseout: function(e) {
+            layer_RW_6.resetStyle(e.target);
+        }
+    });
 
         function style_RW_6_0(feature) {
             switch(String(feature.properties['Nama'])) {
@@ -1343,6 +1369,18 @@ map.on('mouseout', function() {
 			});
 			layer.bindPopup(content, { maxHeight: 400 });
         }
+layer.on({
+        mouseover: function(e) {
+            e.target.setStyle({
+                fillColor: '#ffff00', // Kuning
+                fillOpacity: 0.7,
+                weight: 3
+            });
+        },
+        mouseout: function(e) {
+            layer_BatasRT_7.resetStyle(e.target);
+        }
+    });
 
         function style_BatasRT_7_0(feature) {
             switch(String(feature.properties['Nama'])) {
