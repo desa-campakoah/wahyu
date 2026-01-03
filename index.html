@@ -8,10 +8,6 @@
         /* --- CSS TETAP SAMA SEPERTI SEBELUMNYA --- */
         body { font-family: "Poppins", sans-serif; background: linear-gradient(180deg, #d6eaff 0%, #ffffff 100%); margin: 0; padding: 0; color: #1e3a5f; min-height: 100vh; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 	    .navbar-container { display: flex; justify-content: center; padding: 20px; position: sticky; top: 0; z-index: 1000; }
         .navbar {
             display: flex;
@@ -147,30 +143,39 @@
             animation: fadeIn 0.5s ease;
         }
 
-        @media (max-width: 768px) {
-            .home-menu-container { grid-template-columns: 1fr; }
-        }
+        /* ================= RESPONSIVE NAVBAR ================= */
+@media (max-width: 768px) {
 
-        .hamburger {
-                display: block;
-            }
+    /* [BARIS FIX-1] GRID HOME */
+    .home-menu-container {
+        grid-template-columns: 1fr;
+    }
 
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 75px;
-                right: 20px;
-                background: white;
-                flex-direction: column;
-                padding: 20px;
-                border-radius: 15px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            }
+    /* [BARIS FIX-2] TAMPILKAN HAMBURGER */
+    .hamburger {
+        display: block;
+    }
 
-            .nav-links.show {
-                display: flex;
-            }
-        }
+    /* [BARIS FIX-3] SEMBUNYIKAN MENU DI MOBILE SAJA */
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 75px;
+        right: 20px;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        z-index: 2000;
+    }
+
+    /* [BARIS FIX-4] SAAT AKTIF */
+    .nav-links.show {
+        display: flex;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -184,7 +189,10 @@
                 <small>Jelajahi Wilayah dengan Teknologi</small>
             </div>
         </div>
-        <div class="nav-links">
+
+		<div class="hamburger" onclick="toggleMenu()">☰</div>
+		
+        <div class="nav-links" id="navLinks">
             <a onclick="showHome()">Beranda</a>
             <a onclick="showMap('desa')">Peta Campakoah</a>
             <a onclick="showMap('kecamatan')">Peta Kec. Mrebet</a>
@@ -452,6 +460,7 @@
 
 </body>
 </html>
+
 
 
 
