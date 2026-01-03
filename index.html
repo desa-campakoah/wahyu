@@ -6,7 +6,10 @@
     <title>Portal Desa Campakoah - Smart Village</title>
     <style>
         /* --- CSS TETAP SAMA SEPERTI SEBELUMNYA --- */
-        body { font-family: "Poppins", sans-serif; background: linear-gradient(180deg, #d6eaff 0%, #ffffff 100%); margin: 0; padding: 0; color: #1e3a5f; min-height: 100vh; }
+        body { font-family: "Poppins", sans-serif; background: linear-gradient(180deg, #d6eaff 0%, #ffffff 100%); margin: 0; padding: 0; color: #1e3a5f; min-height: 100vh; display: flex; flex-direction: column;  }
+		#page-wrapper {
+    flex: 1; 
+}
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 	    .navbar-container { display: flex; justify-content: center; padding: 20px; position: sticky; top: 0; z-index: 1000; }
         .navbar {
@@ -180,6 +183,8 @@
 </head>
 <body>
 
+<div id="page-wrapper">
+	
 <div class="navbar-container">
     <nav class="navbar">
         <div class="nav-logo">
@@ -266,6 +271,8 @@
         </div>
     </div>
 
+</div>
+
     <div class="btn-container">
         <button class="btn-accent" onclick="showHome()">Kembali ke Beranda</button>
     </div>
@@ -315,7 +322,7 @@
         </div>
     </div>
 
-    <div class="info-list-container">
+</div>
         
         <div class="info-item-flex">
             <div class="info-icon">🗺️</div>
@@ -380,6 +387,7 @@
         <button class="btn-accent" onclick="showHome()">Kembali ke Beranda</button>
     </div>
 </div>
+
 
 <footer>
     <p>© 2025 Portal Desa Campakoah</p>
@@ -447,6 +455,7 @@
 
 </body>
 </html>
+
 
 
 
