@@ -398,22 +398,33 @@
     }
     
     function showDetail(id) {
-        document.getElementById('home-content').style.display = 'none';
-        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    document.getElementById('home-content').style.display = 'none';   
+    document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none'); 
+    document.getElementById(id).style.display = 'block';             
+
+    document.querySelector("footer").style.display = "block";        
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });                   
+}
+
 
     function showHome() {
-        document.getElementById('home-content').style.display = 'block';
-        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    document.getElementById('home-content').style.display = 'block';  
+    document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none'); 
+
+    document.querySelector("footer").style.display = "block";          
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });                   
+}
+
 
     // FUNGSI BARU UNTUK MENAMPILKAN PETA DI DALAM PORTAL
     function showMap(type) {
-        document.getElementById('home-content').style.display = 'none';
-        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
+    document.getElementById('home-content').style.display = 'none';    
+    document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none'); 
+
+    document.querySelector("footer").style.display = "block";         
+
         
         const mapFrame = document.getElementById('map-frame');
         const mapTitle = document.getElementById('map-title');
@@ -436,6 +447,7 @@
 
 </body>
 </html>
+
 
 
 
