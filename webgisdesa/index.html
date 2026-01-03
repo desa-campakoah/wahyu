@@ -1165,14 +1165,18 @@ map.on('mouseout', function() {
 
 			layer.on({
         mouseover: function(e) {
-            e.target.setStyle({
+			csetStyle({
                 fillColor: '#ffff00', // Kuning
                 fillOpacity: 0.7,
                 weight: 3
             });
-        },
+			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            sw.bringToFront();
+        }
+    },
         mouseout: function(e) {
-            layer_Dusun_5.resetStyle(e.target);
+           var sw = e.target;
+			if (typeof layer_Dusun_5 !== 'undefined') layer_Dusun_5.resetStyle(sw);
         }
     });
 
@@ -1258,14 +1262,18 @@ map.on('mouseout', function() {
         }
 layer.on({
         mouseover: function(e) {
-            e.target.setStyle({
+            csetStyle({
                 fillColor: '#ffff00', // Kuning
                 fillOpacity: 0.7,
                 weight: 3
             });
-        },
+			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            sw.bringToFront();
+        }
+     },
         mouseout: function(e) {
-            layer_RW_6.resetStyle(e.target);
+            var sw = e.target;
+			if (typeof layer_RW_6 !== 'undefined') layer_RW_6.resetStyle(sw);
         }
     });
 
@@ -1371,14 +1379,18 @@ layer.on({
         }
 layer.on({
         mouseover: function(e) {
-            e.target.setStyle({
+            csetStyle({
                 fillColor: '#ffff00', // Kuning
                 fillOpacity: 0.7,
                 weight: 3
             });
-        },
+			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            sw.bringToFront();
+        }	
+    },
         mouseout: function(e) {
-            layer_BatasRT_7.resetStyle(e.target);
+            var sw = e.target;
+			if (typeof layer_BatasRT_7 !== 'undefined') layer_BatasRT_7.resetStyle(sw);
         }
     });
 
