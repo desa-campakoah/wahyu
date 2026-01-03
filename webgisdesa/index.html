@@ -86,11 +86,13 @@
             padding: 12px 15px;
             border-bottom: 1px solid #eee;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
         .search-result-item:hover {
             background: #f0f7ff;
+	transform: translateX(5px);
         }
         
         .search-result-item:last-child {
@@ -307,11 +309,47 @@
             font-size: 11px;
         }
         
+	.leaflet-interactive {
+            transition: all 0.2s ease;
+        }
+
         /* Highlight layer on hover */
         .leaflet-interactive:hover {
-            stroke-width: 3 !important;
+		stroke: #ff6b6b !important;
+            stroke-width: 4 !important;
             stroke-opacity: 1 !important;
             cursor: pointer;
+        }
+
+	/* Warna berbeda untuk setiap layer saat hover */
+        .leaflet-pane[style*="z-index: 405"] .leaflet-interactive:hover {
+            fill: rgba(255, 200, 100, 0.8) !important;
+            stroke: #ff8800 !important;
+        }
+        
+        .leaflet-pane[style*="z-index: 406"] .leaflet-interactive:hover {
+            fill: rgba(100, 200, 255, 0.8) !important;
+            stroke: #0066cc !important;
+        }
+        
+        .leaflet-pane[style*="z-index: 407"] .leaflet-interactive:hover {
+            fill: rgba(150, 255, 150, 0.8) !important;
+            stroke: #00cc44 !important;
+        }
+        
+        .leaflet-pane[style*="z-index: 421"] .leaflet-interactive:hover {
+            fill: rgba(255, 150, 150, 0.9) !important;
+            stroke: #cc0000 !important;
+        }
+        
+        .leaflet-pane[style*="z-index: 403"] .leaflet-interactive:hover {
+            fill: rgba(120, 220, 120, 0.8) !important;
+            stroke: #44aa44 !important;
+        }
+        
+        .leaflet-pane[style*="z-index: 404"] .leaflet-interactive:hover {
+            fill: rgba(150, 255, 100, 0.8) !important;
+            stroke: #66cc00 !important;
         }
         
         /* Responsive adjustments */
@@ -332,11 +370,23 @@
                 width: 100%;
             }
         }
+
+	.search-container input { border: 1px solid #ccc; padding: 4px 8px; width: 180px; }
+.info-panel {
+    padding: 10px; background: rgba(255,255,255,0.9);
+    border-radius: 5px; border-left: 4px solid #f1c40f;
+}
+
         </style>
         <title></title>
     </head>
     <body>
-	 <!-- ========================================== -->
+	 
+	<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Cari Dusun, RT, RW...">
+    <button onclick="executeSearch()"><i class="fa fa-search"></i> Search</button>
+	</div>
+	<!-- ========================================== -->
         <!-- 3. HTML MAP DAN KOMPONEN BARU -->
         <!-- ========================================== -->
         <div id="map">
@@ -569,7 +619,8 @@
         var map = L.map('map', {
             zoomControl:false, maxZoom:23, minZoom:1
         }).fitBounds([[-7.303251379349787,109.29269801234845],[-7.2714238610398345,109.3567525708316]]);
-        var hash = new L.Hash(map);
+        
+	var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
 
@@ -612,6 +663,84 @@
         }
         
         // Search functionality
+	function zoomToSearchResult(result) {
+            if (searchMarker) {
+                map.removeLayer(searchMarker);
+            }
+            
+            if (result.bounds) {
+                map.fitBounds(result.bounds, {
+                    padding: [50, 50],
+                    maxZoom: 17
+                });
+            } else if (result.latlng) {
+                map.setView(result.latlng, 18);
+            }
+            
+            if (result.latlng) {
+                searchMarker = L.marker(result.latlng, {
+                    icon: L.icon({
+                        iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSI0MSIgdmlld0JveD0iMCAwIDI1IDQxIj48cGF0aCBmaWxsPSIjZmYwMDAwIiBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDEuNCAwLjIgMi43IDAuNyA0TDEyLjUgNDEgMjQuMyAxNi41YzAuNC0xLjMgMC43LTIuNiAwLjctNEMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiLz48Y2lyY2xlIGZpbGw9IiNmZmYiIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNSIvPjwvc3ZnPg==',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34]
+                    })
+                }).addTo(map);
+            }
+            
+            if (result.feature && result.feature.setStyle) {
+                var originalStyle = {
+                    weight: result.feature.options.weight || 1,
+                    fillOpacity: result.feature.options.fillOpacity || 0.7,
+                    color: result.feature.options.color || '#333',
+                    fillColor: result.feature.options.fillColor || '#ccc'
+                };
+                
+                result.feature.setStyle({
+                    weight: 5,
+                    fillOpacity: 0.9,
+                    color: '#ff0000',
+                    fillColor: '#ffff00'
+                });
+                
+                var flashCount = 0;
+                var flashInterval = setInterval(function() {
+                    flashCount++;
+                    if (flashCount % 2 === 0) {
+                        result.feature.setStyle({
+                            fillColor: '#ffff00'
+                        });
+                    } else {
+                        result.feature.setStyle({
+                            fillColor: originalStyle.fillColor
+                        });
+                    }
+                    
+                    if (flashCount >= 6) {
+                        clearInterval(flashInterval);
+                        result.feature.setStyle(originalStyle);
+                    }
+                }, 300);
+            }
+            
+	if (result.feature && result.feature.openPopup) {
+setTimeout(function() {
+result.feature.openPopup();
+}, 1000);
+}
+}
+    function smartSearch() {
+        var searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        var resultsDiv = document.getElementById('searchResults');
+        resultsDiv.innerHTML = '';
+        
+        if (searchTerm.length < 2) {
+            resultsDiv.style.display = 'none';
+            return;
+        }
+        
+        var results = [];
+        var exactMatches = [];
         function searchLocation() {
             var searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             var resultsDiv = document.getElementById('searchResults');
@@ -633,6 +762,20 @@
                             var matched = false;
                             var matchedFields = [];
                             
+				for (var key in props) {
+                            if (props[key]) {
+                                var propValue = props[key].toString().toLowerCase();
+                                if (propValue.includes(searchTerm)) {
+                                    matched = true;
+                                    matchedFields.push(key + ': ' + props[key]);
+                                    
+                                    if (propValue === searchTerm || propValue === searchTerm.replace(/\s+/g, '')) {
+                                        isExactMatch = true;
+                                    }
+                                }
+                            }
+                        }
+				
                             // Search in all properties
                             for (var key in props) {
                                 if (props[key] && props[key].toString().toLowerCase().includes(searchTerm)) {
@@ -651,61 +794,58 @@
                                     layerName: layerInfo.name,
                                     feature: feature,
                                     bounds: feature.getBounds ? feature.getBounds() : null,
-                                    latlng: feature.getLatLng ? feature.getLatLng() : null
+                                    latlng: feature.getLatLng ? feature.getLatLng() : null,
+                                isExact: isExactMatch
                                 });
+				if (isExactMatch) {
+                                exactMatches.push(result);
+                            }
+                            results.push(result);
                             }
                         }
                     });
                 }
             });
             
-            if (results.length > 0) {
-                resultsDiv.style.display = 'block';
-                results.forEach(function(result) {
+		var displayResults = exactMatches.length > 0 ? exactMatches : results;
+
+		 if (displayResults.length > 0) {
+            resultsDiv.style.display = 'block';
+            
+            if (exactMatches.length === 1) {
+                var result = exactMatches[0];
+                zoomToSearchResult(result);
+                resultsDiv.innerHTML = '<div class="search-result-item" style="background: #e8f5e9; border-left: 3px solid #4caf50;">' +
+                    '<div class="search-result-title">✓ ' + result.name + '</div>' +
+                    '<div class="search-result-subtitle">' + result.info + 
+                    (result.layerName ? ' • ' + result.layerName : '') + '</div>' +
+                    '<div style="font-size: 10px; color: #4caf50; margin-top: 3px;">✓ Otomatis di-zoom ke lokasi ini</div>' +
+                    '</div>';
+            } else {
+                displayResults.forEach(function(result) {
                     var item = document.createElement('div');
                     item.className = 'search-result-item';
-                    item.innerHTML = '<div class="search-result-title">' + result.name + '</div>' +
+                    if (result.isExact) {
+                        item.style.background = '#f0f7ff';
+                        item.style.borderLeft = '3px solid #2196f3';
+                    }
+                    item.innerHTML = '<div class="search-result-title">' + 
+                                   (result.isExact ? '⭐ ' : '') + result.name + '</div>' +
                                    '<div class="search-result-subtitle">' + result.info + 
                                    (result.layerName ? ' • ' + result.layerName : '') + '</div>';
                     item.onclick = function() {
-                        // Zoom to feature
-                        if (result.bounds) {
-                            map.fitBounds(result.bounds, {padding: [50, 50]});
-                        } else if (result.latlng) {
-                            map.setView(result.latlng, 18);
-                        }
-                        
-                        // Remove old search marker
-                        if (searchMarker) {
-                            map.removeLayer(searchMarker);
-                        }
-                        
-                        // Add new search marker
-                        if (result.latlng) {
-                            searchMarker = L.marker(result.latlng, {
-                                icon: L.icon({
-                                    iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSI0MSIgdmlld0JveD0iMCAwIDI1IDQxIj48cGF0aCBmaWxsPSIjZmYwMDAwIiBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDEuNCAwLjIgMi43IDAuNyA0TDEyLjUgNDEgMjQuMyAxNi41YzAuNC0xLjMgMC43LTIuNiAwLjctNEMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiLz48Y2lyY2xlIGZpbGw9IiNmZmYiIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNSIvPjwvc3ZnPg==',
-                                    iconSize: [25, 41],
-                                    iconAnchor: [12, 41],
-                                    popupAnchor: [1, -34]
-                                })
-                            }).addTo(map);
-                        }
-                        
-                        // Open popup
-                        if (result.feature.openPopup) {
-                            result.feature.openPopup();
-                        }
-                        
+                        zoomToSearchResult(result);
                         resultsDiv.style.display = 'none';
                     };
                     resultsDiv.appendChild(item);
                 });
-            } else {
-                resultsDiv.style.display = 'block';
-                resultsDiv.innerHTML = '<div class="no-results">Tidak ada hasil ditemukan untuk "' + searchTerm + '"</div>';
             }
+        } else {
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = '<div class="no-results">Tidak ada hasil untuk "' + searchTerm + '"</div>';
         }
+    }
+
         
         // Close search results when clicking outside
         document.addEventListener('click', function(e) {
@@ -784,26 +924,54 @@ function hideTooltip() {
 
 // Function to add hover events to a layer
 function addHoverEvents(layer) {
+	var originalStyle = {};
+
     layer.on('mouseover', function(e) {
         if (e.target.feature) {
+	originalStyle = {
+                    weight: e.target.options.weight || 1,
+                    fillOpacity: e.target.options.fillOpacity || 0.7,
+                    color: e.target.options.color || '#333',
+                    fillColor: e.target.options.fillColor || '#ccc'
+                };
+
             showTooltip(e, e.target.feature);
-            // Highlight on hover
+            
             if (e.target.setStyle) {
-                e.target.setStyle({
-                    weight: 3,
-                    fillOpacity: 0.8
-                });
+                    var hoverColor = '#FFD700';
+                    
+                    if (e.target.feature.properties.Nama) {
+                        var nama = e.target.feature.properties.Nama;
+                        if (nama.includes('Dusun')) {
+                            hoverColor = 'rgba(255, 200, 100, 0.9)';
+                        } else if (nama.includes('RW')) {
+                            hoverColor = 'rgba(100, 200, 255, 0.9)';
+                        } else if (nama.includes('RT')) {
+                            hoverColor = 'rgba(150, 255, 150, 0.9)';
+                        }
+                    }
+                    
+                    e.target.setStyle({
+                        weight: 4,
+                        fillOpacity: 0.9,
+                        color: '#ff6b6b',
+                        fillColor: hoverColor
+                    });
+                    
+                    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                        e.target.bringToFront();
+                    }
+                }
             }
-        }
-    });
+        });
+        
+        layer.on('mouseout', function(e) {
+            hideTooltip();
+            if (e.target.setStyle && originalStyle.weight) {
+                e.target.setStyle(originalStyle);
+            }
+        });
     
-    layer.on('mouseout', function(e) {
-        hideTooltip();
-        // Reset style on mouseout
-        if (e.target.setStyle && e.target.defaultOptions) {
-            layer.resetStyle(e.target);
-        }
-    });
     
     layer.on('mousemove', function(e) {
         if (hoverTooltip.style.display === 'block') {
@@ -2597,15 +2765,52 @@ setTimeout(function() {
         });
         resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         map.on("zoomend", function(){
-            resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
+        resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
+        resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
+        resetLabels([layer_Dusun_5,layer_RW_6,layer_BatasRT_7,layer_JalanSetapak_9,layer_Jalan_10,layer_Kesehatan_11,layer_KantorKepalaDesa_12,layer_UMKM_13,layer_RumahKepalaDesa_14,layer_Pendidikan_16,layer_RumahWahyu_19,layer_TempatIbadah_20,layer_LapanganDesa_22]);
         });
 		console.log('WebGIS Desa Campakoah berhasil dimuat!');
-        </script>        
+        </script>  
+	<script>
+// Fungsi untuk menjalankan pencarian pada data asli QGIS Anda
+function executeSearch() {
+    var val = document.getElementById('searchInput').value.toLowerCase();
+    var found = false;
+    
+    // Daftar layer asli Anda dari QGIS
+    var layers = [layer_Dusun_5, layer_RW_6, layer_BatasRT_7, layer_LapanganDesa_22];
+
+    layers.forEach(function(layerGroup) {
+        layerGroup.eachLayer(function(layer) {
+            var p = layer.feature.properties;
+            var match = (p.Nama && p.Nama.toString().toLowerCase().includes(val)) ||
+                        (p.Dusun && p.Dusun.toString().toLowerCase().includes(val)) ||
+                        (p.RT && p.RT.toString() === val) ||
+                        (p.RW && p.RW.toString() === val);
+
+            if (match && val !== "") {
+                map.fitBounds(layer.getBounds());
+                layer.openPopup();
+                
+                // Efek Highlight Kuning Sementara
+                layer.setStyle({fillColor: '#f1c40f', fillOpacity: 0.8});
+                setTimeout(function(){ layerGroup.resetStyle(layer); }, 3000);
+                
+                found = true;
+            }
+        });
+    });
+    if (!found && val !== "") alert("Data tidak ditemukan.");
+}
+
+// Menjalankan pencarian saat tombol Enter ditekan
+document.getElementById('searchInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') executeSearch();
+});
+</script>      
     </body>
 </html>
