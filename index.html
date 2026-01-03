@@ -1,71 +1,125 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+    <!-- ================= META ================= -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Desa Campakoah - Smart Village</title>
+
+    <!-- ================= CSS ================= -->
     <style>
-        /* --- CSS TETAP SAMA SEPERTI SEBELUMNYA --- */
-        body { font-family: "Poppins", sans-serif; background: linear-gradient(180deg, #d6eaff 0%, #ffffff 100%); margin: 0; padding: 0; color: #1e3a5f; min-height: 100vh; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
-        .navbar-container { display: flex; justify-content: center; padding: 20px; position: sticky; top: 0; z-index: 1000; }
-        .navbar { display: flex; align-items: center; justify-content: space-between; background: white; width: 95%; max-width: 1200px; padding: 10px 30px; border-radius: 100px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .nav-logo { display: flex; align-items: center; gap: 10px; }
-        .nav-logo img { height: 40px; }
-        .nav-logo span { font-weight: 800; color: #008b8b; font-size: 18px; line-height: 1; }
-        .nav-logo small { display: block; color: #1e3a5f; font-size: 10px; font-weight: 400; }
-        .nav-links { display: flex; gap: 25px; }
-        .nav-links a { text-decoration: none; color: #1e3a5f; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.3s; }
-        .nav-links a:hover { color: #008b8b; }
-        .hero { text-align: center; padding: 60px 20px; }
-        .hero img.main-shield { width: 320px; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1)); animation: float 6s ease-in-out infinite; }
-        .hero h1 { font-size: 42px; font-weight: 800; color: #008b8b; margin: 10px auto 5px auto; max-width: 900px; line-height: 1.1; text-transform: capitalize; }
-        .webgis-caption { font-size: 18px; font-weight: 600; color: #1e3a5f; margin: 0; letter-spacing: 0.5px; }
-        .detail-view { display: none; padding: 60px 20px; animation: fadeIn 0.5s ease; max-width: 1000px; margin: 0 auto; }
-        .about-header { text-align: center; margin-bottom: 40px; }
-        .about-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: start; margin-bottom: 50px; }
-        .about-text { text-align: justify; line-height: 1.8; font-size: 15px; }
-        .stat-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
-        .stat-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-bottom: 4px solid #008b8b; }
-        .stat-box h3 { color: #008b8b; margin: 0; font-size: 24px; }
-        .stat-box p { font-size: 12px; margin: 5px 0 0 0; color: #555; }
-        .vm-section { background: #ffffff; padding: 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 50px; }
-        .vision-box { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px dashed #ddd; }
-        .vision-box h2 { color: #008b8b; font-size: 24px; margin-bottom: 15px; }
-        .vision-box p { font-style: italic; font-size: 18px; color: #1e3a5f; font-weight: 500; }
-        .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .mission-item { display: flex; gap: 15px; background: #f8fcfb; padding: 15px; border-radius: 12px; font-size: 14px; }
-        .mission-number { background: #008b8b; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: bold; }
-        .info-list-container { display: flex; flex-direction: column; gap: 20px; margin-bottom: 50px; }
-        .info-item-flex { display: flex; align-items: flex-start; gap: 20px; background: #ffffff; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .info-icon { flex-shrink: 0; width: 60px; height: 60px; background: #f0fcfb; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
-        .info-content h3 { margin: 0 0 8px 0; font-size: 18px; color: #008b8b; }
-        .info-content p, .info-content li { margin: 0; font-size: 14px; color: #555; line-height: 1.6; }
-        .info-content ul { padding-left: 18px; margin-top: 5px; list-style-type: square; }
-        .btn-container { text-align: center; margin-top: 40px; }
-        .btn-accent { background: #008b8b; color: white; border: none; padding: 12px 40px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,139,139,0.3); }
-        footer { text-align: center; padding: 40px; color: #999; font-size: 12px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- STYLE KHUSUS TAMBAHAN UNTUK TAB LOKASI --- */
-        .lokasi-banner { 
-            background: linear-gradient(90deg, #1e3a5f 0%, #008b8b 100%); 
-            padding: 40px; border-radius: 20px; text-align: center; color: white; margin-bottom: 30px; 
+        /* ================= GLOBAL ================= */
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(180deg, #d6eaff 0%, #ffffff 100%);
+            margin: 0;
+            padding: 0;
+            color: #1e3a5f;
+            min-height: 100vh;
         }
-        .lokasi-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-        .lokasi-card { background: white; padding: 20px; border-radius: 15px; border-left: 5px solid #008b8b; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .lokasi-card h4 { margin: 0 0 10px 0; color: #008b8b; }
-        .lokasi-card p { margin: 0; font-size: 13px; color: #555; line-height: 1.5; }
 
-        /* --- STYLE TAMBAHAN UNTUK MENU CARD DI BERANDA --- */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            width: 95%;
+            max-width: 1200px;
+            padding: 10px 30px;
+            border-radius: 100px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+        }
+
+        .nav-logo span {
+            font-weight: 800;
+            color: #008b8b;
+            font-size: 18px;
+        }
+
+        .nav-logo small {
+            font-size: 10px;
+            color: #1e3a5f;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1e3a5f;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-links a.active {
+            color: #008b8b;
+            border-bottom: 2px solid #008b8b;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 26px;
+            cursor: pointer;
+            color: #008b8b;
+        }
+
+        /* ================= HERO ================= */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero img.main-shield {
+            width: 320px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* ================= MENU CARD ================= */
         .home-menu-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             max-width: 1000px;
-            margin: 40px auto 0 auto;
+            margin: 40px auto;
             padding: 0 20px;
         }
+
         .menu-card {
             background: rgba(30, 58, 95, 0.05);
             border: 1px solid rgba(0, 139, 139, 0.2);
@@ -74,320 +128,171 @@
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
-            text-decoration: none;
-            color: inherit;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
         }
+
         .menu-card:hover {
             background: white;
             transform: translateY(-10px);
             box-shadow: 0 10px 30px rgba(0, 139, 139, 0.15);
-            border-color: #008b8b;
-        }
-        .menu-card i {
-            font-size: 40px;
-            color: #008b8b;
-            margin-bottom: 15px;
-            display: block;
-        }
-        .menu-card h3 {
-            margin: 0 0 10px 0;
-            color: #1e3a5f;
-            font-size: 18px;
-        }
-        .menu-card p {
-            margin: 0;
-            font-size: 13px;
-            color: #555;
-            line-height: 1.5;
         }
 
-        /* --- STYLE BARU UNTUK IFRAME PETA --- */
-        #map-frame {
-            width: 100%;
-            height: 600px;
-            border: 5px solid white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        /* ================= DETAIL VIEW ================= */
+        .detail-view {
+            display: none;
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: auto;
+            animation: fadeIn 0.5s ease;
         }
 
+        /* ================= RESPONSIVE ================= */
         @media (max-width: 768px) {
-            .home-menu-container { grid-template-columns: 1fr; }
+            .home-menu-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 75px;
+                right: 20px;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
         }
     </style>
 </head>
+
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <div class="navbar-container">
     <nav class="navbar">
+
         <div class="nav-logo">
-            <img src="images/logo.png" alt="Logo">
+            <img src="images/logo.png">
             <div>
                 <span>Campakoah Explore</span>
                 <small>Jelajahi Wilayah dengan Teknologi</small>
             </div>
         </div>
-        <div class="nav-links">
-            <a onclick="showHome()">Beranda</a>
-            <a onclick="showMap('desa')">Peta Campakoah</a>
-            <a onclick="showMap('kecamatan')">Peta Kec. Mrebet</a>
-            <a onclick="showDetail('lokasi-view')">Lokasi</a>
-            <a onclick="showDetail('tentang-view')">Tentang</a>
+
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+        <div class="nav-links" id="navLinks">
+            <a onclick="navClick(this); showHome()">Beranda</a>
+            <a onclick="navClick(this); showMap('desa')">Peta Campakoah</a>
+            <a onclick="navClick(this); showMap('kecamatan')">Peta Kecamatan</a>
+            <a onclick="navClick(this); showDetail('lokasi-view')">Lokasi</a>
+            <a onclick="navClick(this); showDetail('tentang-view')">Tentang</a>
         </div>
+
     </nav>
 </div>
 
+<!-- ================= HOME ================= -->
 <div id="home-content">
     <header class="hero">
-        <img src="images/logo.png" class="main-shield" alt="Shield">
+        <img src="images/logo.png" class="main-shield">
         <h1>Jelajahi Wilayah dengan Teknologi</h1>
-        <p class="webgis-caption">WebGIS Desa Campakoah & Kecamatan Mrebet</p>
-        
+        <p>WebGIS Desa Campakoah & Kecamatan Mrebet</p>
+
         <div class="home-menu-container">
-            <div onclick="showMap('desa')" class="menu-card">
-                <i>📍</i>
-                <h3>Eksplorasi Desa</h3>
-                <p>Akses pemetaan detail infrastruktur, tata guna lahan, dan batas wilayah administrasi Desa Campakoah secara presisi.</p>
-            </div>
-            
-            <div onclick="showMap('kecamatan')" class="menu-card">
-                <i>🏙️</i>
-                <h3>Zona Kecamatan</h3>
-                <p>Tinjauan strategis wilayah Kecamatan Mrebet untuk melihat konektivitas antar desa dalam satu sistem informasi geografis.</p>
-            </div>
-            
-            <div onclick="showDetail('tentang-view')" class="menu-card">
-                <i>🔍</i>
-                <h3>Profil & Visi</h3>
-                <p>Pelajari lebih dalam mengenai latar belakang pengembangan WebGIS ini serta komitmen kami dalam digitalisasi desa.</p>
-            </div>
+            <div class="menu-card" onclick="showMap('desa')">📍 Eksplorasi Desa</div>
+            <div class="menu-card" onclick="showMap('kecamatan')">🏙️ Zona Kecamatan</div>
+            <div class="menu-card" onclick="showDetail('tentang-view')">🔍 Profil & Visi</div>
         </div>
     </header>
 </div>
 
+<!-- ================= MAP VIEW ================= -->
 <div id="map-view" class="detail-view">
-    <div class="lokasi-banner">
-        <h2 id="map-title" style="margin:0;">Menampilkan Peta Spasial</h2>
-        <p id="map-desc" style="margin: 10px 0 0 0; opacity: 0.9; font-size: 15px;">Data geospasial real-time wilayah Campakoah & Mrebet</p>
-    </div>
-    <iframe id="map-frame" src="" frameborder="0"></iframe>
-    <div class="btn-container">
-        <button class="btn-accent" onclick="showHome()">Tutup Peta & Kembali</button>
-    </div>
+    <h2 id="map-title"></h2>
+    <iframe id="map-frame" src="" width="100%" height="600" style="border-radius:20px;"></iframe>
+    <br><br>
+    <button onclick="showHome()">Kembali</button>
 </div>
 
+<!-- ================= LOKASI ================= -->
 <div id="lokasi-view" class="detail-view">
-    <div class="lokasi-banner">
-        <h2 style="margin:0;">Wilayah Operasional WebGIS</h2>
-        <p style="margin: 10px 0 0 0; opacity: 0.9; font-size: 15px;">Peta Sebaran Infrastruktur dan Batas Administrasi Desa Campakoah</p>
-    </div>
-
-    <div style="width: 100%; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 5px solid white;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15827.424368595914!2d109.34!3d-7.36!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6559f5f5f5f5f5%3A0x5027a76e3568a0!2sCampakoah%2C%20Mrebet%2C%20Purbalingga!5e0!3m2!1sid!2sid!4v1620000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-
-    <div class="lokasi-grid-info">
-        <div class="lokasi-card">
-            <h4>📍 Posisi Geografis</h4>
-            <p>Berada di Kecamatan Mrebet, Purbalingga. Wilayah ini didominasi oleh area persawahan produktif dan pemukiman warga yang terintegrasi dengan jaringan jalan kabupaten.</p>
-        </div>
-        <div class="lokasi-card">
-            <h4>🏢 Pusat Pemerintahan</h4>
-            <p>Balai Desa Campakoah menjadi titik sentral koordinasi data spasial dan pelayanan administrasi kependudukan berbasis digital di wilayah ini.</p>
-        </div>
-        <div class="lokasi-card">
-            <h4>🛣️ Aksesibilitas</h4>
-            <p>Memiliki aksesibilitas tinggi melalui jalan utama kecamatan yang menghubungkan antar dusun dan RT/RW di lingkungan Desa Campakoah.</p>
-        </div>
-    </div>
-
-    <div class="btn-container">
-        <button class="btn-accent" onclick="showHome()">Kembali ke Beranda</button>
-    </div>
+    <h2>Lokasi Desa Campakoah</h2>
+    <iframe src="https://www.google.com/maps?q=Campakoah&output=embed"
+            width="100%" height="450" style="border-radius:20px;"></iframe>
+    <br><br>
+    <button onclick="showHome()">Kembali</button>
 </div>
 
+<!-- ================= TENTANG ================= -->
 <div id="tentang-view" class="detail-view">
-    <div class="about-header">
-        <img src="images/logo.png" style="width: 80px; margin-bottom: 15px;">
-        <h1 style="margin:0;">Tentang Desa Campakoah</h1>
-        <p style="color: #666;">Kecamatan Mrebet, Kabupaten Purbalingga</p>
-    </div>
-
-    <div class="about-grid">
-        <div class="about-text">
-            <p><b>Desa Campakoah</b> adalah sebuah desa yang terletak di jantung Kecamatan Mrebet, Kabupaten Purbalingga. Desa ini dikenal memiliki bentang alam yang didominasi oleh lahan pertanian produktif dan pemukiman yang tertata. Sebagai desa yang sedang berkembang, Campakoah berkomitmen untuk mengadopsi teknologi digital dalam tata kelola pemerintahannya demi memberikan pelayanan terbaik bagi penduduknya.</p>
-            <p><b>Campakoah Explore</b> hadir sebagai solusi inovatif atas kebutuhan akan data wilayah yang terintegrasi. Melalui platform WebGIS ini, kami mencoba merangkum kompleksitas data geografis ke dalam tampilan visual yang mudah dipahami oleh siapa saja.</p>
-        </div>
-        <div class="stat-container">
-            <div class="stat-box"><h3>3.654</h3><p>Penduduk</p></div>
-            <div class="stat-box"><h3>12</h3><p>RT</p></div>
-            <div class="stat-box"><h3>4</h3><p>RW</p></div>
-        </div>
-    </div>
-
-    <div class="vm-section">
-        <div class="vision-box">
-            <h2>Visi Desa</h2>
-            <p>"Mewujudkan Desa Campakoah yang Mandiri, Sejahtera, dan Berbasis Digital Menuju Tata Kelola Wilayah yang Transparan"</p>
-        </div>
-        <div class="mission-grid">
-            <div class="mission-item">
-                <div class="mission-number">1</div>
-                <div><b>Digitalisasi Data:</b> Menyelenggarakan sistem informasi desa yang terintegrasi berbasis spasial (WebGIS).</div>
-            </div>
-            <div class="mission-item">
-                <div class="mission-number">2</div>
-                <div><b>Pelayanan Publik:</b> Meningkatkan kecepatan dan ketepatan layanan administrasi kepada masyarakat.</div>
-            </div>
-            <div class="mission-item">
-                <div class="mission-number">3</div>
-                <div><b>Pembangunan Infrastruktur:</b> Mengoptimalkan pembangunan fisik desa yang terencana dan tepat sasaran.</div>
-            </div>
-            <div class="mission-item">
-                <div class="mission-number">4</div>
-                <div><b>Ekonomi Kreatif:</b> Mendorong potensi lokal dan UMKM melalui pemetaan aset ekonomi desa.</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-list-container">
-        
-        <div class="info-item-flex" style="border-left: 5px solid #008b8b; background: #f0fcfb;">
-            <div class="info-icon">👩‍💻</div>
-            <div class="info-content">
-                <h3>Profil Pengembang</h3>
-                <p>Website ini dikembangkan oleh <b>Wahyu Latifatun</b> sebagai proyek akhir sekaligus pemenuhan tugas mata kuliah <b>Geographic Information System (GIS)</b>. Sebagai mahasiswa yang mendalami analisis geospasial, proyek ini merupakan bentuk implementasi praktis dari teori pemetaan digital yang dipelajari di bangku perkuliahan. Fokus utama pengembangan ini adalah bagaimana mengubah data spasial mentah menjadi informasi yang bernilai guna bagi pembangunan tingkat desa. Melalui ketelitian dalam pengolahan data vektor dan raster, pengembang berharap karya ini dapat menjadi contoh nyata peran akademisi dalam memajukan desa melalui digitalisasi tata ruang.</p>
-            </div>
-        </div>
-
-        <div class="info-item-flex">
-            <div class="info-icon">🗺️</div>
-            <div class="info-content">
-                <h3>Cakupan Wilayah</h3>
-                <p>Cakupan wilayah dalam platform ini sangat detail dan komprehensif, meliputi:</p>
-                <ul>
-                    <li><b>Batas Administratif:</b> Pemetaan batas fisik Desa Campakoah yang berbatasan langsung dengan desa-desa tetangga di Kecamatan Mrebet.</li>
-                    <li><b>Level Mikro (RT/RW):</b> Visualisasi detail pembagian 4 RW dan 12 RT untuk mempermudah identifikasi domisili penduduk.</li>
-                    <li><b>Infrastruktur Jalan:</b> Jaringan jalan utama, jalan desa, hingga jalan setapak yang menghubungkan antar dusun.</li>
-                    <li><b>Penggunaan Lahan:</b> Klasifikasi wilayah pemukiman, lahan pertanian (sawah/tegalan), serta area fasilitas umum.</li>
-                    <li><b>Titik Fasilitas Publik:</b> Penanda lokasi gedung pemerintahan desa, sekolah, sarana kesehatan, dan tempat peribadatan.</li>
-                    <li><b>Perspektif Makro:</b> Integrasi peta Kecamatan Mrebet sebagai konteks posisi geografis Desa Campakoah terhadap wilayah sekitar.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="info-item-flex">
-            <div class="info-icon">⚖️</div>
-            <div class="info-content">
-                <h3>Landasan Hukum</h3>
-                <p>Pengembangan sistem WebGIS ini berpijak pada regulasi resmi berikut:</p>
-                <ul>
-                    <li>Undang-Undang Nomor 6 Tahun 2014 tentang Desa.</li>
-                    <li>Undang-Undang Nomor 4 Tahun 2011 tentang Informasi Geospasial.</li>
-                    <li>Peraturan Presiden Nomor 39 Tahun 2019 tentang Satu Data Indonesia.</li>
-                    <li>Peraturan Pemerintah terkait keterbukaan informasi publik dan digitalisasi data pemerintahan.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="info-item-flex">
-            <div class="info-icon">💡</div>
-            <div class="info-content">
-                <h3>Manfaat Utama</h3>
-                <p>Pemanfaatan sistem ini memberikan berbagai keuntungan strategis, diantaranya:</p>
-                <ul>
-                    <li><b>Efisiensi Pelayanan:</b> Mempercepat perangkat desa dalam memberikan surat keterangan terkait lokasi atau domisili warga.</li>
-                    <li><b>Perencanaan Presisi:</b> Menjadi dasar bagi pemerintah desa dalam merencanakan pembangunan drainase, pengaspalan jalan, atau renovasi fasilitas umum berdasarkan lokasi aktual.</li>
-                    <li><b>Transparansi Data:</b> Masyarakat dapat mengetahui progres pembangunan dan pembagian wilayah desa secara terbuka dan daring.</li>
-                    <li><b>Analisis Potensi:</b> Memudahkan identifikasi lahan potensial untuk pengembangan ekonomi, seperti lokasi UMKM unggulan desa.</li>
-                    <li><b>Mitigasi Dasar:</b> Membantu identifikasi area rawan atau area strategis dalam situasi darurat bencana.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="info-item-flex">
-            <div class="info-icon">🚀</div>
-            <div class="info-content">
-                <h3>Pengembangan Masa Depan</h3>
-                <p>Kedepannya, platform Campakoah Explore direncanakan akan terus ditingkatkan dengan fitur-fitur mutakhir seperti:</p>
-                <ul>
-                    <li><b>Dashboard Real-Time:</b> Integrasi data kependudukan dinamis yang langsung terhubung dengan database desa.</li>
-                    <li><b>Sistem Pelaporan Warga:</b> Fitur di mana warga dapat melaporkan kerusakan jalan atau fasilitas umum langsung melalui titik koordinat pada peta.</li>
-                    <li><b>Marketplace Spasial:</b> Direktori UMKM Desa Campakoah yang memungkinkan pengunjung melihat katalog produk berdasarkan lokasi tokonya di peta.</li>
-                    <li><b>Visualisasi 3D:</b> Pengembangan model medan digital (DTM) untuk analisis topografi wilayah yang lebih mendalam bagi kebutuhan teknis.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="info-item-flex">
-            <div class="info-icon">📞</div>
-            <div class="info-content">
-                <h3>Informasi Kontak</h3>
-                <p>Jika Anda memerlukan informasi lebih lanjut atau memiliki masukan terkait pengembangan WebGIS ini, silakan hubungi:</p>
-                <ul>
-                    <li><b>Nama:</b> Wahyu Latifatun (Pengembang Sistem)</li>
-                    <li><b>Email:</b> wahyu.latifatun@gmail.com</li>
-                    <li><b>Instansi:</b> Kantor Pemerintah Desa Campakoah, Kecamatan Mrebet, Purbalingga.</li>
-                    <li><b>Kebutuhan:</b> Konsultasi Data Geospasial / Tugas GIS.</li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="btn-container">
-        <button class="btn-accent" onclick="showHome()">Kembali ke Beranda</button>
-    </div>
+    <h2>Tentang Desa Campakoah</h2>
+    <p>Desa Campakoah berada di Kecamatan Mrebet, Kabupaten Purbalingga...</p>
+    <br>
+    <button onclick="showHome()">Kembali</button>
 </div>
 
-<footer>
-    <p>© 2025 Portal Desa Campakoah - Developed by Wahyu Latifatun for GIS Course Assignment</p>
+<!-- ================= FOOTER ================= -->
+<footer style="text-align:center; padding:40px; color:#999;">
+    © 2025 Portal Desa Campakoah – Wahyu Latifatun
 </footer>
 
+<!-- ================= JAVASCRIPT ================= -->
 <script>
-    function showDetail(id) {
-        document.getElementById('home-content').style.display = 'none';
-        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    function toggleMenu() {
+        document.getElementById("navLinks").classList.toggle("show");
+    }
+
+    function navClick(el) {
+        document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
+        el.classList.add("active");
+        document.getElementById("navLinks").classList.remove("show");
     }
 
     function showHome() {
-        document.getElementById('home-content').style.display = 'block';
-        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.getElementById("home-content").style.display = "block";
+        document.querySelectorAll(".detail-view").forEach(v => v.style.display = "none");
+        window.scrollTo({top:0, behavior:'smooth'});
     }
 
-    // FUNGSI BARU UNTUK MENAMPILKAN PETA DI DALAM PORTAL
+    function showDetail(id) {
+        document.getElementById("home-content").style.display = "none";
+        document.querySelectorAll(".detail-view").forEach(v => v.style.display = "none");
+        document.getElementById(id).style.display = "block";
+        window.scrollTo({top:0, behavior:'smooth'});
+    }
+
     function showMap(type) {
-        document.getElementById('home-content').style.display = 'none';
-        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
-        
-        const mapFrame = document.getElementById('map-frame');
-        const mapTitle = document.getElementById('map-title');
-        const mapDesc = document.getElementById('map-desc');
-        
+        document.getElementById("home-content").style.display = "none";
+        document.querySelectorAll(".detail-view").forEach(v => v.style.display = "none");
+
+        const frame = document.getElementById("map-frame");
+        const title = document.getElementById("map-title");
+
         if(type === 'desa') {
-            mapFrame.src = "webgisdesa/index.html";
-            mapTitle.innerText = "WebGIS Desa Campakoah";
-            mapDesc.innerText = "Menampilkan data infrastruktur dan batas administrasi tingkat desa.";
+            frame.src = "webgisdesa/index.html";
+            title.innerText = "WebGIS Desa Campakoah";
         } else {
-            mapFrame.src = "kecamatan/index.html";
-            mapTitle.innerText = "WebGIS Kecamatan Mrebet";
-            mapDesc.innerText = "Tampilan konektivitas antar wilayah di lingkungan Kecamatan Mrebet.";
+            frame.src = "kecamatan/index.html";
+            title.innerText = "WebGIS Kecamatan Mrebet";
         }
-        
-        document.getElementById('map-view').style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        document.getElementById("map-view").style.display = "block";
+        window.scrollTo({top:0, behavior:'smooth'});
     }
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
