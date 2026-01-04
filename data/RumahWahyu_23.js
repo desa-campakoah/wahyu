@@ -1,0 +1,1 @@
+var json_RumahWahyu_23 = {"type":"FeatureCollection","name":"RumahWahyu_23","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":null,"Nama":"Rumah Wahyu"},"geometry":{"type":"Point","coordinates":[109.321384522733112,-7.285935843257683]}}]}
