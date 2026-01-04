@@ -1,0 +1,1 @@
+var json_RumahKepalaDesa_22 = {"type":"FeatureCollection","name":"RumahKepalaDesa_22","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":"1","Nama":"Rumah Kades","Alamat":"Campakoah","RW":"2","RT":"2","Dusun":"1"},"geometry":{"type":"Point","coordinates":[109.319381872234345,-7.290875130232386]}}]}
