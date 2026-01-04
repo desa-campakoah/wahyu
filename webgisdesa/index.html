@@ -1163,24 +1163,6 @@ map.on('mouseout', function() {
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-			layer.on({
-        mouseover: function(e) {
-			csetStyle({
-                fillColor: '#ffff00', // Kuning
-                fillOpacity: 0.7,
-                weight: 3
-            });
-			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-            sw.bringToFront();
-        }
-    },
-        mouseout: function(e) {
-           var sw = e.target;
-			if (typeof layer_Dusun_5 !== 'undefined') layer_Dusun_5.resetStyle(sw);
-        }
-    });
-
-					
         function style_Dusun_5_0(feature) {
             switch(String(feature.properties['Nama'])) {
                 case 'Dusun 1':
@@ -1260,22 +1242,6 @@ map.on('mouseout', function() {
 			});
 			layer.bindPopup(content, { maxHeight: 400 });
         }
-layer.on({
-        mouseover: function(e) {
-            csetStyle({
-                fillColor: '#ffff00', // Kuning
-                fillOpacity: 0.7,
-                weight: 3
-            });
-			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-            sw.bringToFront();
-        }
-     },
-        mouseout: function(e) {
-            var sw = e.target;
-			if (typeof layer_RW_6 !== 'undefined') layer_RW_6.resetStyle(sw);
-        }
-    });
 
         function style_RW_6_0(feature) {
             switch(String(feature.properties['Nama'])) {
@@ -1377,22 +1343,6 @@ layer.on({
 			});
 			layer.bindPopup(content, { maxHeight: 400 });
         }
-layer.on({
-        mouseover: function(e) {
-            csetStyle({
-                fillColor: '#ffff00', // Kuning
-                fillOpacity: 0.7,
-                weight: 3
-            });
-			if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-            sw.bringToFront();
-        }	
-    },
-        mouseout: function(e) {
-            var sw = e.target;
-			if (typeof layer_BatasRT_7 !== 'undefined') layer_BatasRT_7.resetStyle(sw);
-        }
-    });
 
         function style_BatasRT_7_0(feature) {
             switch(String(feature.properties['Nama'])) {
