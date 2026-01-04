@@ -1,0 +1,1 @@
+var json_Pemakaman_19 = {"type":"FeatureCollection","name":"Pemakaman_19","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":null,"Nama":"TPU Desa Campakoah"},"geometry":{"type":"Point","coordinates":[109.323602291140134,-7.292973347591838]}}]}
