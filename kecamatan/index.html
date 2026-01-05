@@ -182,61 +182,166 @@
             return content;
         }
 
-     // --- FUNGSI HOVER ---
+    
+            // --- FUNGSI HOVER & POPUP ---
             function onEachFeatureHover(feature, layer) {
+                // Simpan style asli untuk dikembalikan saat mouseout
+                layer.options.originalStyle = {
+                    color: layer.options.color || '#3388ff',
+                    weight: layer.options.weight || 2,
+                    fillOpacity: layer.options.fillOpacity || 0.2,
+                    fillColor: layer.options.fillColor || layer.options.color
+                };
+
                 layer.on({
                     mouseover: function (e) {
-                        var content = "<div style='line-height:1.4;'>";
-                        content += "<strong>Informasi Data:</strong><br><hr>";
+                        var content = "<div>";
+                        content += "<strong style='color:#2c3e50; font-size:14px;'>Detail Informasi</strong><hr style='margin:5px 0;'>";
                         
                         var props = feature.properties;
                         var detailCount = 0;
                         for (var key in props) {
-                            if (props[key] && key.toLowerCase() !== 'id' && key.toLowerCase() !== 'fid') {
+                            if (props[key] && !['id', 'fid', 'objectid'].includes(key.toLowerCase())) {
                                 content += "<b>" + key + ":</b> " + props[key] + "<br>";
                                 detailCount++;
                             }
                         }
-                        if(detailCount === 0) content += "<i>Tidak ada data atribut</i>";
+                        if(detailCount === 0) content += "<i>Data atribut kosong</i>";
                         content += "</div>";
 
                         layer.bindTooltip(content, {
                             sticky: true,
                             direction: 'auto',
-                            opacity: 0.9,
+                            opacity: 1.0,
                             className: 'custom-tooltip'
                         }).openTooltip();
 
+                        // Efek Visual Hover
                         if (layer.setStyle) {
                             layer.setStyle({
-                                weight: 3,
-                                color: '#666',
-                                fillOpacity: 0.7
+                                weight: 4,
+                                color: '#34495e',
+                                fillOpacity: 0.6
                             });
                         }
                     },
                     mouseout: function (e) {
                         layer.closeTooltip();
-                        if (layer.setStyle && layer.options.originalStyle) {
+                        if (layer.setStyle) {
                             layer.setStyle(layer.options.originalStyle);
-                        } else if (layer.setStyle) {
-                            layer.setStyle({
-                                weight: 2,
-                                color: layer.options.color,
-                                fillOpacity: 0.2
-                            });
                         }
                     }
                 });
 
-                // Popup klik
-                var pContent = "<table>";
+                // Popup saat klik
+                var popupTable = "<table style='width:100%; border-collapse: collapse;'>";
                 for (var k in feature.properties) {
-                    pContent += "<tr><th>"+k+"</th><td>"+feature.properties[k]+"</td></tr>";
+                    popupTable += "<tr style='border-bottom: 1px solid #eee;'><th style='text-align:left; padding:4px; font-size:12px; color:#7f8c8d;'>" + k + "</th><td style='padding:4px; font-size:12px;'>" + feature.properties[k] + "</td></tr>";
                 }
-                pContent += "</table>";
-                layer.bindPopup(pContent);
+                popupTable += "</table>";
+                layer.bindPopup(popupTable);
             }
+
+            // --- FUNGSI PENCARIAN ---
+            function performSearch(query) {
+                if (!query) return;
+                var q = query.toLowerCase().trim();
+                var found = false;
+
+                map.eachLayer(function(layer) {
+                    if (found) return;
+                    if (layer.feature && layer.feature.properties) {
+                        var props = layer.feature.properties;
+                        for (var key in props) {
+                            if (props[key] && props[key].toString().toLowerCase().includes(q)) {
+                                if (layer.getBounds) {
+                                    map.fitBounds(layer.getBounds(), { maxZoom: 18 });
+                                } else if (layer.getLatLng) {
+                                    map.setView(layer.getLatLng(), 19);
+                                }
+                                layer.openPopup();
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                });
+
+                if (!found) {
+                    var el = document.getElementById('search-msg');
+                    el.style.display = 'block';
+                    setTimeout(function(){ el.style.display = 'none'; }, 2500);
+                }
+            }
+
+            document.getElementById('search-input').onkeypress = function(e) {
+                if (e.keyCode == 13) performSearch(this.value);
+            };
+
+            // --- PEMUATAN LAYER DENGAN VALIDASI ---
+            
+            // 1. Batas Wilayah
+            if (typeof json_BatasWilayahKecamatanMrebet_3 !== 'undefined') {
+                var layer_Batas = L.geoJson(json_BatasWilayahKecamatanMrebet_3, {
+                    style: { color: '#ff7800', weight: 3, fillOpacity: 0.1 },
+                    onEachFeature: onEachFeatureHover
+                }).addTo(map);
+                map.fitBounds(layer_Batas.getBounds());
+            }
+
+            // 2. UMKM (Titik)
+            if (typeof json_UMKM_20 !== 'undefined') {
+                L.geoJson(json_UMKM_20, {
+                    pointToLayer: function (f, l) {
+                        return L.circleMarker(l, { radius: 7, fillColor: "#e74c3c", color: "#fff", weight: 2, fillOpacity: 0.9 });
+                    },
+                    onEachFeature: onEachFeatureHover
+                }).addTo(map);
+            }
+
+            // 3. Pendidikan (Titik)
+            if (typeof json_Pendidikan_27 !== 'undefined') {
+                L.geoJson(json_Pendidikan_27, {
+                    pointToLayer: function (f, l) {
+                        return L.circleMarker(l, { radius: 7, fillColor: "#3498db", color: "#fff", weight: 2, fillOpacity: 0.9 });
+                    },
+                    onEachFeature: onEachFeatureHover
+                }).addTo(map);
+            }
+
+            // 4. Jalan (Garis)
+            if (typeof json_JalanDesa_17 !== 'undefined') {
+                L.geoJson(json_JalanDesa_17, {
+                    style: { color: '#34495e', weight: 2, opacity: 0.8 },
+                    onEachFeature: onEachFeatureHover
+                }).addTo(map);
+            }
+
+            // --- LEGENDA ---
+            var legend = L.control({position: 'bottomright'});
+            legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'legend-control');
+                div.innerHTML = '<div class="legend-title">Legenda Interaktif</div>';
+                
+                var items = [
+                    { label: 'Batas Kecamatan', color: '#ff7800' },
+                    { label: 'UMKM Mrebet', color: '#e74c3c' },
+                    { label: 'Fasilitas Pendidikan', color: '#3498db' },
+                    { label: 'Jalan Desa', color: '#34495e' },
+                    { label: 'Tempat Ibadah', color: '#2ecc71' }
+                ];
+
+                items.forEach(function(item) {
+                    div.innerHTML += `
+                        <div class="legend-item">
+                            <div class="legend-color" style="background:${item.color}"></div>
+                            <span>${item.label}</span>
+                        </div>`;
+                });
+                return div;
+            };
+            legend.addTo(map);
+        };
 
             // --- FUNGSI PENCARIAN ---
             function searchMap(query) {
