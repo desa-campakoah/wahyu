@@ -182,51 +182,149 @@
             return content;
         }
 
-        // Fungsi highlight saat hover
-        function highlightFeature(e) {
-            var layer = e.target;
-            if (layer.setStyle && layer.feature.geometry.type !== 'Point') {
-                layer.setStyle({
-                    weight: 4,
-                    color: '#ff0000',
-                    fillOpacity: 0.7
+     // --- FUNGSI HOVER ---
+            function onEachFeatureHover(feature, layer) {
+                layer.on({
+                    mouseover: function (e) {
+                        var content = "<div style='line-height:1.4;'>";
+                        content += "<strong>Informasi Data:</strong><br><hr>";
+                        
+                        var props = feature.properties;
+                        var detailCount = 0;
+                        for (var key in props) {
+                            if (props[key] && key.toLowerCase() !== 'id' && key.toLowerCase() !== 'fid') {
+                                content += "<b>" + key + ":</b> " + props[key] + "<br>";
+                                detailCount++;
+                            }
+                        }
+                        if(detailCount === 0) content += "<i>Tidak ada data atribut</i>";
+                        content += "</div>";
+
+                        layer.bindTooltip(content, {
+                            sticky: true,
+                            direction: 'auto',
+                            opacity: 0.9,
+                            className: 'custom-tooltip'
+                        }).openTooltip();
+
+                        if (layer.setStyle) {
+                            layer.setStyle({
+                                weight: 3,
+                                color: '#666',
+                                fillOpacity: 0.7
+                            });
+                        }
+                    },
+                    mouseout: function (e) {
+                        layer.closeTooltip();
+                        if (layer.setStyle && layer.options.originalStyle) {
+                            layer.setStyle(layer.options.originalStyle);
+                        } else if (layer.setStyle) {
+                            layer.setStyle({
+                                weight: 2,
+                                color: layer.options.color,
+                                fillOpacity: 0.2
+                            });
+                        }
+                    }
                 });
-                layer.bringToFront();
-            }
-        }
 
-        function resetHighlight(e) {
-            if (e.target.defaultOptions && e.target.defaultOptions.style) {
-                e.target.setStyle(e.target.defaultOptions.style);
-            }
-        }
-
-        // Data contoh layer (ganti dengan data Anda yang sebenarnya)
-        // Karena file data eksternal tidak dapat dimuat di sini, saya membuat placeholder
-        
-        // Contoh untuk menambahkan layer dengan hover dan popup
-        function addGeoJsonLayer(data, style, popupTitle, pane, zIndex) {
-            map.createPane(pane);
-            map.getPane(pane).style.zIndex = zIndex;
-            
-            return L.geoJson(data, {
-                pane: pane,
-                style: style,
-                onEachFeature: function(feature, layer) {
-                    // Popup
-                    layer.bindPopup(createPopup(feature.properties, popupTitle || 'Informasi'));
-                    
-                    // Hover effect
-                    layer.on({
-                        mouseover: highlightFeature,
-                        mouseout: resetHighlight
-                    });
-                    
-                    // Simpan style default untuk reset
-                    layer.defaultOptions = { style: style };
+                // Popup klik
+                var pContent = "<table>";
+                for (var k in feature.properties) {
+                    pContent += "<tr><th>"+k+"</th><td>"+feature.properties[k]+"</td></tr>";
                 }
-            }).addTo(map);
-        }
+                pContent += "</table>";
+                layer.bindPopup(pContent);
+            }
+
+            // --- FUNGSI PENCARIAN ---
+            function searchMap(query) {
+                if (!query) return;
+                var q = query.toLowerCase();
+                var found = false;
+
+                map.eachLayer(function(layer) {
+                    if (found) return;
+                    if (layer.feature && layer.feature.properties) {
+                        var props = layer.feature.properties;
+                        for (var key in props) {
+                            if (props[key] && props[key].toString().toLowerCase().includes(q)) {
+                                if (layer.getBounds) {
+                                    map.fitBounds(layer.getBounds());
+                                } else if (layer.getLatLng) {
+                                    map.setView(layer.getLatLng(), 18);
+                                }
+                                layer.openPopup();
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                });
+
+                if (!found) {
+                    var el = document.getElementById('search-msg');
+                    el.style.display = 'block';
+                    setTimeout(function(){ el.style.display = 'none'; }, 2000);
+                }
+            }
+
+            document.getElementById('search-input').onkeypress = function(e) {
+                if (e.keyCode == 13) searchMap(this.value);
+            };
+
+            // --- PEMUATAN LAYER ---
+            if (typeof json_BatasWilayahKecamatanMrebet_3 !== 'undefined') {
+                var layer_Batas = L.geoJson(json_BatasWilayahKecamatanMrebet_3, {
+                    style: { color: '#ff7800', weight: 2, fillOpacity: 0.1 },
+                    onEachFeature: onEachFeatureHover,
+                    originalStyle: { color: '#ff7800', weight: 2, fillOpacity: 0.1 }
+                }).addTo(map);
+                map.fitBounds(layer_Batas.getBounds());
+            }
+
+            if (typeof json_UMKM_20 !== 'undefined') {
+                L.geoJson(json_UMKM_20, {
+                    pointToLayer: function (f, l) {
+                        return L.circleMarker(l, { radius: 6, fillColor: "#e31a1c", color: "#fff", weight: 1, fillOpacity: 0.8 });
+                    },
+                    onEachFeature: onEachFeatureHover,
+                    originalStyle: { fillColor: "#e31a1c", color: "#fff", weight: 1, fillOpacity: 0.8 }
+                }).addTo(map);
+            }
+
+            if (typeof json_Pendidikan_27 !== 'undefined') {
+                L.geoJson(json_Pendidikan_27, {
+                    pointToLayer: function (f, l) {
+                        return L.circleMarker(l, { radius: 6, fillColor: "#1f78b4", color: "#fff", weight: 1, fillOpacity: 0.8 });
+                    },
+                    onEachFeature: onEachFeatureHover,
+                    originalStyle: { fillColor: "#1f78b4", color: "#fff", weight: 1, fillOpacity: 0.8 }
+                }).addTo(map);
+            }
+
+            // --- LEGENDA KUSTOM ---
+            var legend = L.control({position: 'bottomright'});
+            legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'legend-control');
+                div.innerHTML = '<div class="legend-title">Legenda Peta</div>';
+                
+                var items = [
+                    { label: 'Batas Kecamatan', color: '#ff7800' },
+                    { label: 'Titik UMKM', color: '#e31a1c' },
+                    { label: 'Pendidikan', color: '#1f78b4' },
+                    { label: 'Jalan Desa', color: '#333' },
+                    { label: 'Ibadah', color: '#33a02c' }
+                ];
+
+                items.forEach(function(item) {
+                    div.innerHTML += '<div class="legend-item"><div class="legend-color" style="background:'+item.color+'"></div>' + item.label + '</div>';
+                });
+                return div;
+            };
+            legend.addTo(map);
+        };
         // --- BAGIAN 5: FUNGSI PENCARIAN (Search) ---
         function globalSearch(query) {
             if (!query) return;
