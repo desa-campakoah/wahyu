@@ -317,27 +317,6 @@
                 }).addTo(map);
             }
 
-            // --- LEGENDA ---
-            var legend = L.control({position: 'bottomright'});
-            legend.onAdd = function (map) {
-                var div = L.DomUtil.create('div', 'legend-control');
-                div.innerHTML = '<div class="legend-title">Legenda Interaktif</div>';
-                
-                var items = [
-                    { label: 'Batas Kecamatan', color: '#ff7800' },
-                    { label: 'UMKM Mrebet', color: '#e74c3c' },
-                    { label: 'Fasilitas Pendidikan', color: '#3498db' },
-                    { label: 'Jalan Desa', color: '#34495e' },
-                    { label: 'Tempat Ibadah', color: '#2ecc71' }
-                ];
-
-                items.forEach(function(item) {
-                    div.innerHTML += `
-                        <div class="legend-item">
-                            <div class="legend-color" style="background:${item.color}"></div>
-                            <span>${item.label}</span>
-                        </div>`;
-                });
                 return div;
             };
             legend.addTo(map);
