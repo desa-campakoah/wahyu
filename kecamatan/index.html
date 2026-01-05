@@ -163,41 +163,70 @@
          return tempDiv.innerHTML;
         }
 
-         // --- BAGIAN 4: FUNGSI HOVER (Data muncul saat kursor lewat) ---
-        function onEachFeatureHover(feature, layer) {
-            layer.on({
-                mouseover: function (e) {
-                    // Membuat Tooltip (Label) saat kursor masuk ke titik/area
-                    var content = "<strong>Informasi:</strong><br>";
-                    // Mengambil data dari atribut 'Nama' atau 'REMARK'
-                    content += feature.properties.Nama || feature.properties.REMARK || "Tidak ada nama";
-                    
-                    layer.bindTooltip(content, {
-                        sticky: true, // Label menempel/mengikuti pergerakan kursor
-                        direction: 'top',
-                        opacity: 0.9
-                    }).openTooltip();
-
-                    // Memberi efek highlight (opsional)
-                    if (layer.setStyle) {
-                        layer.setStyle({ fillOpacity: 0.7, weight: 4 });
-                    }
-                },
-                mouseout: function (e) {
-                    // Menutup Tooltip saat kursor keluar
-                    layer.closeTooltip();
-                    
-                    // Kembalikan style ke semula (opsional)
-                    if (layer.setStyle) {
-                        layer.setStyle({ fillOpacity: 0.1, weight: 3 });
-                    }
-                }
-            });
+         // Fungsi untuk membuat popup yang informatif
+        function createPopup(properties, title) {
+            let content = '<div class="popup-title">' + title + '</div><table>';
+            let importantFields = ['Nama', 'NAMOBJ', 'Alamat', 'RT', 'RW', 'Dusun', 'LUASWH', 'KLSSNG', 'FGSIBD', 'KATPDK'];
             
-            // Tetap jalankan Popup jika user mengklik titik tersebut
-            layer.bindPopup(feature.properties.Nama || "Data Detail");
+            for (let key in properties) {
+                if (properties[key] !== null && properties[key] !== '' && 
+                    (importantFields.includes(key) || 
+                     (!key.includes('SHAPE') && !key.includes('FCODE') && !key.includes('METADATA')))) {
+                    let displayKey = key.replace(/_/g, ' ').toUpperCase();
+                    let value = properties[key].toString();
+                    if (value.length > 50) value = value.substring(0, 50) + '...';
+                    content += '<tr><th>' + displayKey + '</th><td>' + value + '</td></tr>';
+                }
+            }
+            content += '</table>';
+            return content;
         }
 
+        // Fungsi highlight saat hover
+        function highlightFeature(e) {
+            var layer = e.target;
+            if (layer.setStyle && layer.feature.geometry.type !== 'Point') {
+                layer.setStyle({
+                    weight: 4,
+                    color: '#ff0000',
+                    fillOpacity: 0.7
+                });
+                layer.bringToFront();
+            }
+        }
+
+        function resetHighlight(e) {
+            if (e.target.defaultOptions && e.target.defaultOptions.style) {
+                e.target.setStyle(e.target.defaultOptions.style);
+            }
+        }
+
+        // Data contoh layer (ganti dengan data Anda yang sebenarnya)
+        // Karena file data eksternal tidak dapat dimuat di sini, saya membuat placeholder
+        
+        // Contoh untuk menambahkan layer dengan hover dan popup
+        function addGeoJsonLayer(data, style, popupTitle, pane, zIndex) {
+            map.createPane(pane);
+            map.getPane(pane).style.zIndex = zIndex;
+            
+            return L.geoJson(data, {
+                pane: pane,
+                style: style,
+                onEachFeature: function(feature, layer) {
+                    // Popup
+                    layer.bindPopup(createPopup(feature.properties, popupTitle || 'Informasi'));
+                    
+                    // Hover effect
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight
+                    });
+                    
+                    // Simpan style default untuk reset
+                    layer.defaultOptions = { style: style };
+                }
+            }).addTo(map);
+        }
         // --- BAGIAN 5: FUNGSI PENCARIAN (Search) ---
         function globalSearch(query) {
             if (!query) return;
@@ -281,7 +310,7 @@
             return div;
         };
         legend.addTo(map);
-        
+
         // modify popup if contains media
         function addClassToPopupIfMedia(content, popup) {
             var tempDiv = document.createElement('div');
