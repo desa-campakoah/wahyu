@@ -322,42 +322,7 @@
             legend.addTo(map);
         };
 
-            // --- FUNGSI PENCARIAN ---
-            function searchMap(query) {
-                if (!query) return;
-                var q = query.toLowerCase();
-                var found = false;
-
-                map.eachLayer(function(layer) {
-                    if (found) return;
-                    if (layer.feature && layer.feature.properties) {
-                        var props = layer.feature.properties;
-                        for (var key in props) {
-                            if (props[key] && props[key].toString().toLowerCase().includes(q)) {
-                                if (layer.getBounds) {
-                                    map.fitBounds(layer.getBounds());
-                                } else if (layer.getLatLng) {
-                                    map.setView(layer.getLatLng(), 18);
-                                }
-                                layer.openPopup();
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                });
-
-                if (!found) {
-                    var el = document.getElementById('search-msg');
-                    el.style.display = 'block';
-                    setTimeout(function(){ el.style.display = 'none'; }, 2000);
-                }
-            }
-
-            document.getElementById('search-input').onkeypress = function(e) {
-                if (e.keyCode == 13) searchMap(this.value);
-            };
-
+            /
             // --- PEMUATAN LAYER ---
             if (typeof json_BatasWilayahKecamatanMrebet_3 !== 'undefined') {
                 var layer_Batas = L.geoJson(json_BatasWilayahKecamatanMrebet_3, {
