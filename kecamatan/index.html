@@ -3350,6 +3350,106 @@
         map.on("layerremove", function(){
             resetLabels([layer_BatasWilayahKecamatanMrebet_3,layer_DesaCampakoah_6,layer_LapanganDesa_10,layer_Dusun_11,layer_RW_12,layer_BatasRT_13,layer_JalanSetapak_16,layer_JalanDesa_17,layer_Pemakaman_19,layer_UMKM_20,layer_Curug_21,layer_RumahKepalaDesa_22,layer_RumahWahyu_23,layer_FasilitasKesehatan_24,layer_TempatIbadah_25,layer_saranaibadah_26,layer_Pendidikan_27,layer_Pendidikan2_28,layer_BalaiDesa_29,layer_PemerintahanDesa_30]);
         });
+			// --- FUNGSI HOVER & POPUP ---
+            function setupLayerFeatures(feature, layer) {
+                var originalStyle = {
+                    color: layer.options.color || '#3388ff',
+                    weight: layer.options.weight || 2,
+                    fillOpacity: layer.options.fillOpacity || 0.2
+                };
+
+                layer.on({
+                    mouseover: function (e) {
+                        var props = feature.properties;
+                        var content = "<b>Info Atribut:</b><br><hr>";
+                        for (var key in props) {
+                            if (props[key]) content += "<b>"+key+":</b> "+props[key]+"<br>";
+                        }
+                        
+                        layer.bindTooltip(content, { sticky: true, className: 'custom-tooltip' }).openTooltip();
+                        if (layer.setStyle) layer.setStyle({ weight: 4, color: '#000', fillOpacity: 0.5 });
+                    },
+                    mouseout: function (e) {
+                        layer.closeTooltip();
+                        if (layer.setStyle) layer.setStyle(originalStyle);
+                    }
+                });
+
+                var pContent = "<table style='font-size:12px;'>";
+                for (var k in feature.properties) {
+                    pContent += "<tr><th style='text-align:left; padding-right:10px;'>"+k+"</th><td>"+feature.properties[k]+"</td></tr>";
+                }
+                pContent += "</table>";
+                layer.bindPopup(pContent);
+            }
+
+            // --- PEMUATAN DATA GEOJSON ---
+            
+            // 1. Batas Wilayah
+            if (typeof json_BatasWilayahKecamatanMrebet_3 !== 'undefined') {
+                var lyrBatas = L.geoJson(json_BatasWilayahKecamatanMrebet_3, {
+                    style: { color: '#ff7800', weight: 2, fillOpacity: 0.1 },
+                    onEachFeature: setupLayerFeatures
+                }).addTo(map);
+                map.fitBounds(lyrBatas.getBounds());
+            }
+
+            // 2. UMKM (Titik)
+            if (typeof json_UMKM_20 !== 'undefined') {
+                L.geoJson(json_UMKM_20, {
+                    pointToLayer: function (f, latlng) {
+                        return L.circleMarker(latlng, { radius: 6, fillColor: "#e74c3c", color: "#fff", weight: 1, fillOpacity: 1 });
+                    },
+                    onEachFeature: setupLayerFeatures
+                }).addTo(map);
+            }
+
+            // --- FUNGSI PENCARIAN ---
+            function searchLocation(query) {
+                var q = query.toLowerCase().trim();
+                var found = false;
+                map.eachLayer(function(l) {
+                    if (found) return;
+                    if (l.feature && l.feature.properties) {
+                        for (var k in l.feature.properties) {
+                            if (l.feature.properties[k] && l.feature.properties[k].toString().toLowerCase().includes(q)) {
+                                if (l.getBounds) map.fitBounds(l.getBounds());
+                                else if (l.getLatLng) map.setView(l.getLatLng(), 18);
+                                l.openPopup();
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                });
+                if (!found) {
+                    document.getElementById('search-msg').style.display = 'block';
+                    setTimeout(function(){ document.getElementById('search-msg').style.display = 'none'; }, 2000);
+                }
+            }
+
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchLocation(this.value);
+            });
+
+            // --- LEGENDA ---
+            var legend = L.control({position: 'bottomright'});
+            legend.onAdd = function() {
+                var div = L.DomUtil.create('div', 'legend-control');
+                div.innerHTML = '<div class="legend-title">Legenda Peta</div>';
+                var items = [
+                    { n: 'Batas Kecamatan', c: '#ff7800' },
+                    { n: 'Titik UMKM', c: '#e74c3c' },
+                    { n: 'Pendidikan', c: '#3498db' },
+                    { n: 'Jalan Desa', c: '#34495e' }
+                ];
+                items.forEach(function(i) {
+                    div.innerHTML += '<div class="legend-item"><div class="legend-color" style="background:'+i.c+'"></div>'+i.n+'</div>';
+                });
+                return div;
+            };
+            legend.addTo(map);
+        });
         </script>        
     </body>
 </html>
