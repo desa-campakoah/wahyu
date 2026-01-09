@@ -123,15 +123,6 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- STYLE KHUSUS TAMBAHAN UNTUK TAB LOKASI --- */
-        .lokasi-banner { 
-            background: linear-gradient(90deg, #1e3a5f 0%, #008b8b 100%); 
-            padding: 40px; border-radius: 20px; text-align: center; color: white; margin-bottom: 30px; 
-        }
-        .lokasi-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-        .lokasi-card { background: white; padding: 20px; border-radius: 15px; border-left: 5px solid #008b8b; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .lokasi-card h4 { margin: 0 0 10px 0; color: #008b8b; }
-        .lokasi-card p { margin: 0; font-size: 13px; color: #555; line-height: 1.5; }
 
         /* --- STYLE TAMBAHAN UNTUK MENU CARD DI BERANDA --- */
         .home-menu-container {
@@ -250,9 +241,8 @@
 		
         <div class="nav-links" id="navLinks">
             <a onclick="showHome()">Beranda</a>
-            <a onclick="showMap('desa')">Peta Campakoah</a>
-            <a onclick="showMap('kecamatan')">Peta Kec. Mrebet</a>
-            <a onclick="showDetail('lokasi-view')">Lokasi</a>
+            <a onclick="showMap('desa')">Peta Desa</a>
+            <a onclick="showMap('kecamatan')">Peta Kecamatan</a>
             <a onclick="showDetail('tentang-view')">Tentang</a>
         </div>
     </nav>
@@ -297,30 +287,6 @@
     </div>
 </div>
 
-<div id="lokasi-view" class="detail-view">
-    <div class="lokasi-banner">
-        <h2 style="margin:0;">Wilayah Operasional WebGIS</h2>
-        <p style="margin: 10px 0 0 0; opacity: 0.9; font-size: 15px;">Peta Sebaran Infrastruktur dan Batas Administrasi Desa Campakoah</p>
-    </div>
-
-    <div style="width: 100%; height: 450px; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 5px solid white;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15827.424368595914!2d109.34!3d-7.36!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6559f5f5f5f5f5%3A0x5027a76e3568a0!2sCampakoah%2C%20Mrebet%2C%20Purbalingga!5e0!3m2!1sid!2sid!4v1620000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-
-    <div class="lokasi-grid-info">
-        <div class="lokasi-card">
-            <h4>📍 Posisi Geografis</h4>
-            <p>Berada di Kecamatan Mrebet, Purbalingga. Wilayah ini didominasi oleh area persawahan produktif dan pemukiman warga yang terintegrasi dengan jaringan jalan kabupaten.</p>
-        </div>
-        <div class="lokasi-card">
-            <h4>🏢 Pusat Pemerintahan</h4>
-            <p>Balai Desa Campakoah menjadi titik sentral koordinasi data spasial dan pelayanan administrasi kependudukan berbasis digital di wilayah ini.</p>
-        </div>
-        <div class="lokasi-card">
-            <h4>🛣️ Aksesibilitas</h4>
-            <p>Memiliki aksesibilitas tinggi melalui jalan utama kecamatan yang menghubungkan antar dusun dan RT/RW di lingkungan Desa Campakoah.</p>
-        </div>
-    </div>
 
     <div class="btn-container">
         <button class="btn-accent" onclick="showHome()">Kembali ke Beranda</button>
