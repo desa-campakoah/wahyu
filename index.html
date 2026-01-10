@@ -44,7 +44,56 @@
         .info-content ul { padding-left: 18px; margin-top: 5px; list-style-type: square; }
         .btn-container { text-align: center; margin-top: 40px; }
         .btn-accent { background: #008b8b; color: white; border: none; padding: 12px 40px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,139,139,0.3); }
-        footer { text-align: center; padding: 40px; color: #999; font-size: 12px; }
+/* --- STYLING FOOTER PERBAIKAN --- */
+        .footer-main { background-color: #0f172a; color: #f8fafc; padding: 80px 0 30px 0; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .footer-brand img {
+            height: 48px; /* Ubah angka ini (misal 40px) untuk mengecilkan logo */
+            width: auto;
+        }
+        .footer-brand h3 { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; margin-bottom: 4px; }
+        .footer-brand p.sub-title { font-size: 11px; color: #94a3b8; font-weight: 500; letter-spacing: 1px; margin-bottom: 20px; }
+        .footer-description { font-size: 14px; color: #94a3b8; line-height: 1.8; margin-bottom: 30px; max-width: 340px; }
+        
+        .footer-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #10b981; margin-bottom: 25px; display: block; }
+        
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { font-size: 14px; color: #94a3b8; text-decoration: none; transition: 0.3s; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .footer-links a:hover { color: #ffffff; transform: translateX(5px); }
+        .footer-links i { width: 14px; height: 14px; color: #10b981; }
+
+        .footer-contact li { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; font-size: 14px; color: #94a3b8; line-height: 1.5; }
+        .footer-contact i { color: #10b981; flex-shrink: 0; margin-top: 3px; }
+
+        .footer-social { display: flex; gap: 12px; }
+        .social-circle { width: 38px; height: 38px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: #ffffff; }
+        .social-circle:hover { background: #10b981; transform: scale(1.1) translateY(-3px); color: #ffffff; }
+
+        .footer-bottom { 
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            margin-top: 60px; 
+            padding-top: 30px; 
+            display: flex; 
+            flex-direction: column; /* Membuat isi menjadi atas-bawah */
+            align-items: center;    /* Rata tengah horizontal */
+            text-align: center;     /* Teks rata tengah */
+            gap: 10px;              /* Jarak antar baris teks */
+            font-size: 12px; 
+            color: #64748b; 
+        }
+        .footer-bottom b { color: #ffffff; }
+        
+        /* Responsive Footer */
+        @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 640px) { 
+            .footer-grid { grid-template-columns: 1fr; gap: 50px; } 
+            .footer-bottom { flex-direction: column; text-align: center; gap: 15px; }
+            .home-menu-container, .mission-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 32px; }
+            .nav-links { display: none; }
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- STYLE KHUSUS TAMBAHAN UNTUK TAB LOKASI --- */
@@ -110,7 +159,7 @@
 <div class="navbar-container">
     <nav class="navbar">
         <div class="nav-logo">
-            <img src="d:\logo.png" alt="Logo">
+            <img src="images/Logo-kabupaten.png" alt="Logo">
             <div>
                 <span>Campakoah Explore</span>
                 <small>Jelajahi Wilayah dengan Teknologi</small>
@@ -120,7 +169,6 @@
             <a onclick="showHome()">Beranda</a>
             <a href="webgisdesa/index.html" target="_blank">Peta Campakoah</a>
             <a href="kecamatan/index.html" target="_blank">Peta Kec.Mrebet</a>
-            <a onclick="showDetail('lokasi-view')">Lokasi</a>
             <a onclick="showDetail('tentang-view')">Tentang</a>
         </div>
     </nav>
@@ -128,7 +176,7 @@
 
 <div id="home-content">
     <header class="hero">
-        <img src="d:\logo.png" class="main-shield" alt="Shield">
+        <img src="images/Logo-kabupaten.png" class="main-shield" alt="Shield">
         <h1>Jelajahi Wilayah dengan Teknologi</h1>
         <p class="webgis-caption">WebGIS Desa Campakoah & Kecamatan Mrebet</p>
         
@@ -187,7 +235,7 @@
 
 <div id="tentang-view" class="detail-view">
     <div class="about-header">
-        <img src="d:\logo.png" style="width: 80px; margin-bottom: 15px;">
+        <img src="images/Logo-kabupaten.png" style="width: 100px; margin-bottom: 15px;">
         <h1 style="margin:0;">Tentang Desa Campakoah</h1>
         <p style="color: #666;">Kecamatan Mrebet, Kabupaten Purbalingga</p>
     </div>
@@ -298,19 +346,6 @@
             </div>
         </div>
 
-        <div class="info-item-flex">
-            <div class="info-icon">📞</div>
-            <div class="info-content">
-                <h3>Informasi Kontak</h3>
-                <p>Jika Anda memerlukan informasi lebih lanjut atau memiliki masukan terkait pengembangan WebGIS ini, silakan hubungi:</p>
-                <ul>
-                    <li><b>Nama:</b> Wahyu Latifatun (Pengembang Sistem)</li>
-                    <li><b>Email:</b> wahyu.latifatun@gmail.com</li>
-                    <li><b>Instansi:</b> Kantor Pemerintah Desa Campakoah, Kecamatan Mrebet, Purbalingga.</li>
-                    <li><b>Kebutuhan:</b> Konsultasi Data Geospasial / Tugas GIS.</li>
-                </ul>
-            </div>
-        </div>
 
     </div>
 
@@ -319,8 +354,78 @@
     </div>
 </div>
 
-<footer>
-    <p>© 2025 Portal Desa Campakoah - Developed by Wahyu Latifatun for GIS Course Assignment</p>
+<!-- Footer -->
+   <!-- FOOTER MODERN TEROPTIMASI -->
+<footer class="footer-main">
+    <div class="footer-grid">
+        <!-- Brand Section -->
+        <div class="footer-brand">
+            <div class="flex items-center gap-4 mb-6">
+                <img src="d:\compressed-files\Logo-Kabupaten-Purbalingga-Jawa-Tengah_compressed.png" alt="Logo">
+                <div>
+                    <h3>Desa Campakoah</h3>
+                    <p class="sub-title">PURBALINGGA, JAWA TENGAH</p>
+                </div>
+            </div>
+            <p class="footer-description">
+                Situs resmi pusat pelayanan informasi geospasial dan administrasi publik bagi seluruh masyarakat Desa Campakoah.
+            </p>
+            <div class="footer-social">
+                <a href="#" class="social-circle"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                <a href="#" class="social-circle"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                <a href="#" class="social-circle"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                <a href="#" class="social-circle"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+            </div>
+        </div>
+
+        <!-- Tautan Pintar -->
+        <div>
+            <span class="footer-section-title">Tautan Pintar</span>
+            <ul class="footer-links">
+                <li><a onclick="showHome()"><i data-lucide="chevron-right"></i> Beranda Utama</a></li>
+                <li><a onclick="showDetail('tentang-view')"><i data-lucide="chevron-right"></i> Profil Desa</a></li>
+                <li><a href="#"><i data-lucide="chevron-right"></i> Peta Interaktif</a></li>
+                <li><a href="#"><i data-lucide="chevron-right"></i> Agenda Desa</a></li>
+            </ul>
+        </div>
+
+        <!-- Layanan -->
+        <div>
+            <span class="footer-section-title">Layanan</span>
+            <ul class="footer-links">
+                <li><a href="#"><i data-lucide="chevron-right"></i> Pengaduan Masyarakat</a></li>
+                <li><a href="#"><i data-lucide="chevron-right"></i> Data Spasial RT/RW</a></li>
+                <li><a href="#"><i data-lucide="chevron-right"></i> Transparansi Dana</a></li>
+                <li><a href="#"><i data-lucide="chevron-right"></i> Potensi UMKM</a></li>
+            </ul>
+        </div>
+
+        <!-- Kontak -->
+        <div>
+            <span class="footer-section-title">Kontak Kami</span>
+            <ul class="footer-contact">
+                <li>
+                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    <span>Jl. Raya Campakoah No. 1, Kec. Mrebet, Kab. Purbalingga, 53352</span>
+                </li>
+                <li>
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                    <span>desa@campakoah.go.id</span>
+                </li>
+                <li>
+                    <i data-lucide="phone" class="w-5 h-5"></i>
+                    <span>+62 (XXX) XXX XXXX</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="max-w-[1200px] mx-auto px-5">
+        <div class="footer-bottom">
+            <p>&copy; 2026 Pemerintah Desa Campakoah. Seluruh Hak Cipta Dilindungi.</p>
+            <p>Web ini dibuat untuk memenuhi tugas akhir Geographic Information System (GIS)</p>
+        </div>
+    </div>
 </footer>
 
 <script>
