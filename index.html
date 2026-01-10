@@ -167,8 +167,8 @@
         </div>
         <div class="nav-links">
             <a onclick="showHome()">Beranda</a>
-            <a href="webgisdesa/index.html" target="_self">Peta Desa</a>
-            <a href="kecamatan/index.html" target="_self">Peta Kecamatan</a>
+            <a onclick="openMap('webgisdesa/index.html', 'Peta Desa Campakoah')">Peta Desa</a>
+            <a onclick="openMap('kecamatan/index.html', 'Peta Kecamatan Mrebet')">Peta Kecamatan</a>
             <a onclick="showDetail('tentang-view')">Tentang</a>
         </div>
     </nav>
@@ -181,14 +181,14 @@
         <p class="webgis-caption">WebGIS Desa Campakoah & Kecamatan Mrebet</p>
         
         <div class="home-menu-container">
-            <a href="webgisdesa/index.html" target="_self" class="menu-card">
-                <i>📍</i>
+            <div onclick="openMap('webgisdesa/index.html', 'Eksplorasi Desa Campakoah')" class="menu-card">
+                <i style="font-size: 40px; display: block; margin-bottom: 10px; font-style: normal;">📍</i>
                 <h3>Eksplorasi Desa</h3>
                 <p>Akses pemetaan detail infrastruktur, tata guna lahan, dan batas wilayah administrasi Desa Campakoah secara presisi.</p>
             </a>
             
-            <a href="kecamatan/index.html" target="_self" class="menu-card">
-                <i>🏙️</i>
+            <div onclick="openMap('kecamatan/index.html', 'Zona Kecamatan Mrebet')" class="menu-card">
+                <i style="font-size: 40px; display: block; margin-bottom: 10px; font-style: normal;">🏙️</i>
                 <h3>Zona Kecamatan</h3>
                 <p>Tinjauan strategis wilayah Kecamatan Mrebet untuk melihat konektivitas antar desa dalam satu sistem informasi geografis.</p>
             </a>
@@ -354,6 +354,15 @@
     </div>
 </div>
 
+    <!-- KONTEN PETA (IFRAME) -->
+<div id="map-view" class="detail-view">
+    <button onclick="showHome()" style="background: #1e3a5f; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; margin-bottom: 15px;">← Kembali ke Beranda</button>
+    <h2 id="map-title" style="color: #008b8b; margin-top: 0;">Peta Wilayah</h2>
+    <div class="iframe-container">
+        <iframe id="map-frame" src=""></iframe>
+    </div>
+</div>
+    
 <!-- Footer -->
    <!-- FOOTER MODERN TEROPTIMASI -->
 <footer class="footer-main">
@@ -429,6 +438,25 @@
 </footer>
 
 <script>
+
+    // Fungsi untuk memuat peta ke dalam Iframe tanpa pindah halaman
+    function openMap(url, title) {
+        // Sembunyikan semua section
+        document.getElementById('home-content').style.display = 'none';
+        document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
+        
+        // Tampilkan map view dan set isi iframe
+        const mapView = document.getElementById('map-view');
+        const mapFrame = document.getElementById('map-frame');
+        const mapTitle = document.getElementById('map-title');
+        
+        mapView.style.display = 'block';
+        mapTitle.innerText = title;
+        mapFrame.src = url; // Link peta masuk ke sini
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function showDetail(id) {
         document.getElementById('home-content').style.display = 'none';
         document.querySelectorAll('.detail-view').forEach(v => v.style.display = 'none');
